@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="54a68d8e-23f5-4885-851d-6ca702f286bb" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/static/js/registrationForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/registrationForm.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/statusForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/statusForm.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -115,7 +114,7 @@
       <workItem from="1585215086518" duration="6480000" />
       <workItem from="1585250262799" duration="9585000" />
       <workItem from="1585311131557" duration="5123000" />
-      <workItem from="1585348143723" duration="2745000" />
+      <workItem from="1585348143723" duration="4298000" />
     </task>
     <servers />
   </component>
