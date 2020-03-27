@@ -6,7 +6,7 @@
         const appID = statusForm.id.value;
         const match = /pes\/\d{2}\/(\d+)/.exec(appID);
         if(match){
-            fetch('http://127.0.0.1:5000/status',{
+            fetch('https://ieee-registration.herokuapp.com/status',{
                 method:'POST',
                 headers: {
                     'Content-Type': 'application/json'

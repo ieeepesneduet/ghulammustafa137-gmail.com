@@ -8,7 +8,7 @@
             if(!(/\d{4}-\d{7}/.test(pN))) return showMsg('Phone NUmber in wrong format','danger');
             if(!(/\d{5}-\d{7}-\d/).test(cc)) return showMsg('CNIC Number in wrong format','danger');
             if(files[0].size > 500*1024*1024) return showMsg('Image greater than 500kb','danger');
-            fetch('http://127.0.0.1:5000/registration',{
+            fetch('https://ieee-registration.herokuapp.com/registration',{
                 method:'POST',
                 body: new FormData(registrationForm)
             })
