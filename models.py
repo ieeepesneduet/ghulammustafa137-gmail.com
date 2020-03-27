@@ -34,8 +34,8 @@ class Registration(base):
         self.why = why
         self.achievements = achievements
 
-# if __name__ == '__main__':
-from sqlalchemy import create_engine
-db = create_engine(environ['DATABASE_URL'])
-base.metadata.create_all(db)
+if __name__ == '__main__':
+    from sqlalchemy import create_engine
+    db = create_engine(environ['DATABASE_URL'])
+    base.metadata.create_all(db)
 
