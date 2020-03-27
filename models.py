@@ -33,8 +33,8 @@ class Registration(base):
         self.why = why
         self.achievements = achievements
 
-if __name__ == '__main__':
-    from sqlalchemy import create_engine
-    db = create_engine('postgresql://mustafa:12345678@localhost:5432/ieee')
-    base.metadata.create_all(db)
+# if __name__ == '__main__':
+from sqlalchemy import create_engine
+db = create_engine('postgresql://mustafa:12345678@localhost:5432/ieee')
+base.metadata.create_all(db)
 
