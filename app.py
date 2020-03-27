@@ -7,7 +7,7 @@ from os import path,environ
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 app = Flask(__name__)
-db = create_engine(environ['DATABASE_URI'])
+db = create_engine(environ['DATABASE_URL'])
 # f"postgresql://{environ['USERNAME']}:{environ['PASSWORD']}@localhost:5432/ieee"
 Session = sessionmaker(bind=db)
 session = Session()
