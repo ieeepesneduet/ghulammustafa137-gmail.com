@@ -1,5 +1,6 @@
 from sqlalchemy import Column,String,Integer,Boolean
 from sqlalchemy.ext.declarative import declarative_base
+from os import environ
 
 base = declarative_base()
 
@@ -35,6 +36,6 @@ class Registration(base):
 
 # if __name__ == '__main__':
 from sqlalchemy import create_engine
-db = create_engine('postgresql://mustafa:12345678@localhost:5432/ieee')
+db = create_engine(environ['DATABASE_URL'])
 base.metadata.create_all(db)
 
