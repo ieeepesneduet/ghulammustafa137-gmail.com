@@ -34,7 +34,6 @@ def registration():
         if firstName and email and phoneNumber and len(phoneNumber) == 11 and cnic and len(cnic) == 13 and year and domain and discipline and about and association and why and achievements and image:
             fileType = file_type(image.filename)
             if fileType and fileType in ALLOWED_EXTENSIONS:
-                error=False
                 application = Registration(firstName,email,phoneNumber,cnic,year,domain,discipline,about,association,why,achievements)
                 session = Session()
                 session.add(application)
@@ -42,13 +41,11 @@ def registration():
                     session.commit()
                 except exc.IntegrityError:
                     session.rollback()
-                    error=True
-                finally:
                     session.close()
-                    if error:
-                        return jsonify(err='email or/and cnic already registered')
-                    # image.save('/app/static/images/applicants/'+str(application.id)+'.'+fileType)
-                    return jsonify(id=application.id)
+                    return jsonify(err='email or/and cnic already registered')
+                session.close()
+                # image.save('/app/static/images/applicants/'+str(application.id)+'.'+fileType)
+                return jsonify(id=application.id)
             else:
                 return jsonify(err='Please upload a .jpg/.png image')
         else:
