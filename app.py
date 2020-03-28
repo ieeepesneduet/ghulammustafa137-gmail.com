@@ -41,7 +41,7 @@ def registration():
                     session.commit()
                 except exc.IntegrityError:
                     return jsonify(err='email or/and cnic already registered')
-                image.save('/app/static/images/applicants/'+str(application.id)+'.'+fileType)
+                # image.save('/app/static/images/applicants/'+str(application.id)+'.'+fileType)
                 return jsonify(id=application.id)
             else:
                 return jsonify(err='Please upload a .jpg/.png image')
