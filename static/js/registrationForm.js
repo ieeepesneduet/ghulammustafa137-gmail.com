@@ -5,8 +5,8 @@
         e.preventDefault();
         const {email:{value:em},phoneNumber:{value:pN},firstName:{value:fN},cnic:{value:cc},year:{value:y},domain:{value:dn},discipline:{value:dis},about:{value:ab},association:{value:as},why:{value:wy},achievements:{value:ach},image:{files}} = registrationForm;
         if(em && pN && fN && cc && y && dn && dis && ab && as && wy && ach && files[0]){
-            if(!(/\d{4}-\d{7}/.test(pN))) return showMsg('Phone NUmber in wrong format','danger');
-            if(!(/\d{5}-\d{7}-\d/).test(cc)) return showMsg('CNIC Number in wrong format','danger');
+            if(pN.length !== 11) return showMsg('Invalid Phone Number','danger');
+            if(cc.length !== 13) return showMsg('Invalid CNIC Number','danger');
             if(files[0].size > 500*1024*1024) return showMsg('Image greater than 500kb','danger');
             fetch('https://ieee-registration.herokuapp.com/registration',{
                 method:'POST',

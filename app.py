@@ -2,13 +2,12 @@ from flask import Flask,render_template,request,jsonify
 from sqlalchemy import create_engine,exc
 from models import *
 from sqlalchemy.orm import sessionmaker
-from os import path,environ
+from os import environ
 
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 app = Flask(__name__)
 db = create_engine(environ['DATABASE_URL'])
-# f"postgresql://{environ['USERNAME']}:{environ['PASSWORD']}@localhost:5432/ieee"
 Session = sessionmaker(bind=db)
 session = Session()
 
@@ -33,7 +32,7 @@ def registration():
         why = request.form['why']
         achievements = request.form['achievements']
         image = request.files['image']
-        if firstName and email and phoneNumber and cnic and year and domain and discipline and about and association and why and achievements and image:
+        if firstName and email and phoneNumber and len(phoneNumber) == 11 and cnic and len(cnic) == 13 and year and domain and discipline and about and association and why and achievements and image:
             fileType = file_type(image.filename)
             if fileType and fileType in ALLOWED_EXTENSIONS:
                 application = Registration(firstName,email,phoneNumber,cnic,year,domain,discipline,about,association,why,achievements)
@@ -42,7 +41,7 @@ def registration():
                     session.commit()
                 except exc.IntegrityError:
                     return jsonify(err='email or/and cnic already registered')
-                image.save(path.join('./static/images/applicants',str(application.id)+'.'+fileType))
+                image.save('/app/static/images/applicants/'+str(application.id)+'.'+fileType)
                 return jsonify(id=application.id)
             else:
                 return jsonify(err='Please upload a .jpg/.png image')
