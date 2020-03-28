@@ -63,9 +63,9 @@ def status():
         if request.is_json:
             session = Session()
             data = session.query(Registration).get(request.get_json()['id'])
+            session.close()
             if data is None:
                 return jsonify(err='Invalid ID')
-            session.close()
             return jsonify(a=data.name,b=data.year,c=data.email,d=data.phone_number,e=data.cnic,f=data.domain,g=data.discipline,h=data.about,i=data.association,j=data.why,k=data.achievements,l=data.status)
         else:
             return jsonify(err='Error parsing data')
