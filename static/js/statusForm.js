@@ -4,7 +4,7 @@
         e.stopImmediatePropagation();
         e.preventDefault();
         const appID = statusForm.id.value;
-        const match = /pes\/\d{2}\/(\d+)/.exec(appID);
+        const match = /pes\/\d{2}\/([A-Za-z0-9]{5})/.exec(appID);
         if(match){
             fetch('https://ieee-registration.herokuapp.com/status',{
                 method:'POST',
@@ -29,7 +29,7 @@
                 })
                 .catch(err => showMsg(err.message,'danger'))
         }else{
-            showMsg('Application ID is in wrong format.Correct format pes/20/34');
+            showMsg('Application ID is in wrong format.Correct format pes/20/Kn5sU');
         }
     }
 })(window);

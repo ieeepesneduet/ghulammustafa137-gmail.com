@@ -3,16 +3,27 @@ from sqlalchemy import create_engine,exc
 from models import *
 from sqlalchemy.orm import sessionmaker
 from os import environ
+from random import randint
 
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 app = Flask(__name__)
+app.config['MAX_CONTENT_LENGTH'] = 500*1024 -1
 db = create_engine(environ['DATABASE_URL'])
 Session = sessionmaker(bind=db)
 
 def file_type(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower()
+
+
+def randomStringGenerator():
+    str = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    randStr = [0,1,2,3,4]
+    for i in randStr:
+        randStr[i] = str[randint(0,61)]
+    return ''.join(randStr)
+
 
 @app.route('/registration',methods=['GET','POST'])
 def registration():
@@ -34,8 +45,16 @@ def registration():
         if firstName and email and phoneNumber and len(phoneNumber) == 11 and cnic and len(cnic) == 13 and year and domain and discipline and about and association and why and achievements and image:
             fileType = file_type(image.filename)
             if fileType and fileType in ALLOWED_EXTENSIONS:
-                application = Registration(firstName,email,phoneNumber,cnic,year,domain,discipline,about,association,why,achievements)
                 session = Session()
+                while True:
+                    randStr = randomStringGenerator()
+                    data = session.query(Registration).get(randStr)
+                    if data is None:
+                        break
+
+                application = Registration(randStr,firstName,email,phoneNumber,cnic,year,domain,discipline,about,association,why,achievements)
+                imageInstance = Imagestore(image.read())
+                application.imagestore = imageInstance
                 session.add(application)
                 try:
                     session.commit()
@@ -44,8 +63,7 @@ def registration():
                     session.close()
                     return jsonify(err='email or/and cnic already registered')
                 session.close()
-                # image.save('/app/static/images/applicants/'+str(application.id)+'.'+fileType)
-                return jsonify(id=application.id)
+                return jsonify(id=randStr)
             else:
                 return jsonify(err='Please upload a .jpg/.png image')
         else:
@@ -60,10 +78,12 @@ def status():
         if request.is_json:
             session = Session()
             data = session.query(Registration).get(request.get_json()['id'])
-            session.close()
             if data is None:
+                session.close()
                 return jsonify(err='Invalid ID')
-            return jsonify(a=data.name,b=data.year,c=data.email,d=data.phone_number,e=data.cnic,f=data.domain,g=data.discipline,h=data.about,i=data.association,j=data.why,k=data.achievements,l=data.status)
+            json=jsonify(a=data.name,b=data.year,c=data.email,d=data.phone_number,e=data.cnic,f=data.domain,g=data.discipline,h=data.about,i=data.association,j=data.why,k=data.achievements,l=data.status)
+            session.close()
+            return json
         else:
             return jsonify(err='Error parsing data')
 
