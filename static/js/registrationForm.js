@@ -18,7 +18,7 @@
                 })
                 .then(data => {
                     if(data.err) throw new Error(data.err);
-                    showMsg(`Your application has been received.Your application id is pes/20/${data.id} .You can use this id to check the status of your application.`,'success')
+                    showMsg(`Your application has been received.Your application id is pes/20/${data.id} .You can use this id to check the status of your application.Your code will be emailed to you shortly.`,'primary')
                     registrationForm.reset();
                 })
                 .catch(err => showMsg(err.message,'danger'))
