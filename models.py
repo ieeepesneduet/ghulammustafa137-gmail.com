@@ -1,7 +1,6 @@
-from sqlalchemy import Column,String,Boolean,LargeBinary,ForeignKey
+from sqlalchemy import Column,String,Boolean,LargeBinary,ForeignKey,Binary
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
-from os import environ
 
 base = declarative_base()
 
@@ -10,7 +9,7 @@ class Registration(base):
 
     id = Column(String(5),primary_key=True)
     name = Column(String(32),nullable=False)
-    email = Column(String(32),nullable=False,unique=True)
+    email = Column(String(50),nullable=False,unique=True)
     phone_number = Column(String(11),nullable=False)
     cnic = Column(String(13),nullable=False,unique=True)
     year = Column(String(6),nullable=False)
@@ -48,9 +47,13 @@ class Imagestore(base):
     def __init__(self, data):
         self.data = data
 
-if __name__ == '__main__':
-    from sqlalchemy import create_engine
-    db = create_engine(environ['DATABASE_URL'])
-    base.metadata.create_all(db)
-    db.dispose()
+class Admin(base):
+    __tablename__='admin'
+
+    email = Column(String(50),primary_key=True)
+    password = Column(Binary(60),nullable=False)
+
+    def __init__(self,email,password):
+        self.email=email
+        self.password=password
 

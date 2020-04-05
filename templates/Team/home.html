@@ -1,0 +1,39 @@
+{% extends 'Team/layout.html' %}
+{% block content %}
+<div id="img">
+  <img src="{{ url_for('static',filename='images/home.png') }}" width = 100%>
+</div>
+<table>
+  <tr>
+    <td id="left-col">
+
+      <img src="{{ url_for('static',filename='images/teamall.jpg') }}" style="max-width: 95%;margin-bottom: 50px;margin-top: -50px;">
+            <h4 class="about head_about">
+        About IEEE PES NEDUET
+      </h4><br>
+      <p class="about">
+      IEEE PES (Power and Energy Society) is the world’s largest forum for sharing the latest in technological developments in the electric power industry, for developing standards that guide the development and construction of equipment and systems, and for educating members of the industry and the general public. The PES chapter is one of the oldest association of Institute of Electrical and Electronics Engineers (IEEE) with a mission of providing scientific information of power systems that leads to the betterment of society and our members. The IEEE PES NEDUET chapter is one of the biggest division of the PES society in Karachi, Pakistan.
+      </p><br>
+      <h4 class="about head_about">
+        Mission of PES
+      </h4><br>
+      <p class="about">
+        To be the leading provider of scientific and engineering information on electric power and energy for the betterment of society, and the preferred professional development source for our members ~ Approved by the IEEE PES Governing Board, 17 July 2003.
+      </p>
+      
+    </td>
+    <td id="right-col">
+      <div class="col-md-12">
+        <div id="container" style="width: 100%; height: 600px;margin-top: -200px;"></div>
+      </div>
+    </td>
+  </tr>
+</table>
+   
+
+  
+
+
+  <script type="text/javascript" src="{{ url_for('static' ,filename='js/chart.js') }}"></script>
+
+{% endblock %}

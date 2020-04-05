@@ -1,4 +1,4 @@
-{% extends 'layout.html' %}
+{% extends 'CandidateArea/layout.html' %}
 
 {% block content %}
 	<div class="container-contact100" id="replace">
@@ -11,7 +11,7 @@
 				<label class="label-input100" for="first-name">Tell us your name *</label>
 				<div class="wrap-input100 rs1-wrap-input100 validate-input" data-validate="Type first name">
 					<input id="first-name" class="input100" type="text" name="firstName"
-						placeholder="Enter Your Name" required="">
+						placeholder="Enter Your Name" required>
 					<span class="focus-input100"></span>
 				</div>
 
@@ -38,7 +38,7 @@
 				</div>
 				<label class="label-input100" for="year">Choose your year</label>
 				<div class="wrap-input100 change_select_position" style="background-color: transparent;">
-					<select name="year" id="options" placeholder="choose your year" required="">
+					<select name="year" id="options" placeholder="choose your year" required>
 						<option value="First">First</option>
 						<option value="Second">Second</option>
 						<option value="Third">Third</option>
@@ -50,7 +50,7 @@
 
 				<label class="label-input100" for="phone">Choose Domain</label>
 				<div class="wrap-input100 change_select_position" style="background-color: transparent;">
-					<select name="domain" id="options" placeholder="choose your domain" required="">
+					<select name="domain" id="options" placeholder="choose your domain" required>
 						<option value="Promotions">Promotions</option>
 						<option value="Marketing">Marketing</option>
 						<option value="Graphics">Graphics</option>
@@ -65,29 +65,29 @@
 				<label class="label-input100" for="Discipline">Enter your discipline (i.e, Electrical Engineering) *</label>
 				<div class="wrap-input100 rs1-wrap-input100 validate-input" data-validate="Type first name">
 					<input id="Discipline" class="input100" type="text" name="discipline"
-						placeholder="Enter Your Discipline" required="">
+						placeholder="Enter Your Discipline" required>
 					<span class="focus-input100"></span>
 				</div>
 				<label class="label-input100" for="intro">Tell us about yourself *</label>
 				<div class="wrap-input100 rs1-wrap-input100 validate-input" data-validate="Type first name">
-                    <textarea id="intro" class="input100" type="text" name="about" placeholder="" required=""></textarea>
+                    <textarea id="intro" class="input100" type="text" name="about" placeholder="" required></textarea>
 					<span class="focus-input100"></span>
 				</div>
 				<label class="label-input100" for="role">Are You Associated with any volunteering roles even outside
 					IEEE PES NED *</label>
 				<div class="wrap-input100 rs1-wrap-input100 validate-input" data-validate="Type first name">
-					<input id="role" class="input100" type="text" name="association" placeholder="" required="">
+					<input id="role" class="input100" type="text" name="association" placeholder="" required>
 					<span class="focus-input100"></span>
 				</div>
 				<label class="label-input100" for="join">Why do you want to join IEEE PES NED</label>
 				<div class="wrap-input100 rs1-wrap-input100 validate-input" data-validate="Type first name">
-                    <textarea id="join" class="input100" type="text" name="why" placeholder="" required=""></textarea>
+                    <textarea id="join" class="input100" type="text" name="why" placeholder="" required></textarea>
 					<span class="focus-input100"></span>
 				</div>
 				<label class="label-input100" for="achieve">Share your achievements within IEEE (if any, mention NIL if
 					nothing).</label>
 				<div class="wrap-input100 rs1-wrap-input100 validate-input" data-validate="Type first name">
-                    <textarea id="achieve" class="input100" type="text" name="achievements" placeholder="" required=""></textarea>
+                    <textarea id="achieve" class="input100" type="text" name="achievements" placeholder="" required></textarea>
 					<span class="focus-input100"></span>
 				</div>
 				<label class="label-input100" for="image">Enter Your Photo</label>
@@ -95,7 +95,7 @@
 					<label class="fileContainer">
 						
 						Upload the image
-						<input name="image" type="file"/>
+						<input name="image" type="file" required>
 					</label>
 				</div>
 
