@@ -1,5 +1,5 @@
 anychart.onDocumentReady(function () {
-    fetch('http://127.0.0.1:5000/chart')
+    fetch('https://ieee-registration.herokuapp.com/chart')
         .then(response => {
             if (!response.ok) throw new Error('Server encountered an error')
             return response.json()
