@@ -6,33 +6,42 @@ anychart.onDocumentReady(function () {
         })
         .then(data => {
             //ENTER THE CANDIDATE YEARS HERE (NUMBER OF FIRST, SECOND, THIRD AND FINAL YEAR)
-            const chartData = {
-                header: ["YEAR", "CANDIDATES"],
-                rows: [
-                    ["FIRST", data.First],
-                    ["SECOND", data.Second],
-                    ["THIRD", data.Third],
-                    ["FINAL", data.Fourth]
-                ]
-            };
+//             const chartData = {
+//                 header: ["YEAR", "CANDIDATES"],
+//                 rows: [
+//                     ["FIRST", data.First],
+//                     ["SECOND", data.Second],
+//                     ["THIRD", data.Third],
+//                     ["FINAL", data.Fourth]
+//                 ]
+//             };
+//
+//             // create the chart
+//             // let chart = anychart.bar();
+//
+//             // add data
+//
+//
+// // create the chart
+//             const chart = new anychart.column();
+//
+//             chart.data(chartData);
+//
+//             // set the chart title
+//             chart.title("YEARWISE CANDIDATE APPLICATION");
+//
+//             // draw
+//             chart.container("container");
+//             chart.draw();
 
-            // create the chart
-            // let chart = anychart.bar();
-
-            // add data
-
-
-// create the chart
-            const chart = new anychart.column();
-
-            chart.data(chartData);
-
-            // set the chart title
-            chart.title("YEARWISE CANDIDATE APPLICATION");
-
-            // draw
-            chart.container("container");
-            chart.draw();
+            const ctx = document.getElementById('myChart').getContext('2d');
+            const chart = new Chart(ctx, {
+                type: 'bar',
+                data:{
+                    labels: ['First','Second','Third','Final'],
+                    data:[data.First,data.Second,data.Third,data.Fourth]
+                }
+            })
         })
         .catch(err => showMsg(err.message, 'danger'))
 
