@@ -8,7 +8,7 @@
             if(pN.length !== 11) return showMsg('Invalid Phone Number','danger');
             if(cc.length !== 13) return showMsg('Invalid CNIC Number','danger');
             if(files[0].size >= 500*1024) return showMsg('Image should be less than 500kb','danger');
-            fetch('http://127.0.0.1:5000/candidatearea/registration',{
+            fetch('https://ieee-registration.herokuapp.com/candidatearea/registration',{
                 method:'POST',
                 body: new FormData(registrationForm)
             })

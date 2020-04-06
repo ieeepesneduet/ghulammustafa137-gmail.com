@@ -1,5 +1,5 @@
 (function chartLoader() {
-    fetch('http://127.0.0.1:5000/team/chart')
+    fetch('https://ieee-registration.herokuapp.com/team/chart')
         .then(response => {
             if (!response.ok) throw new Error('Server encountered an error')
             return response.json()
