@@ -189,10 +189,9 @@ def candidate(year):
             dataCount = sessionDB.query(func.count(Registration.id)).filter(Registration.year == year).scalar()
             data = sessionDB.query(Registration).options(load_only('name','email','phone_number','discipline')).filter(Registration.year == year).limit(10).all()
         sessionDB.close()
-        return render_template('Team/candidate.html',year=year,numCandidates=dataCount,candidates=data)
-
+        return render_template('Team/candidate.html',year=year,numCandidates=dataCount,candidates=data,title=year+' Year Candidates')
     else:
-        return render_template('Team/login.html',msg='You need to login first to access this area')
+        return redirect(url_for('login'))
 
 
 
