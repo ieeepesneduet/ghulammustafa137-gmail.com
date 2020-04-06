@@ -17,13 +17,13 @@ anychart.onDocumentReady(function () {
             };
 
             // create the chart
-            let chart = anychart.bar();
+            // let chart = anychart.bar();
 
             // add data
 
 
 // create the chart
-            chart = anychart.column();
+            const chart = anychart.column();
 
             chart.data(chartData);
 
