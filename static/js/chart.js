@@ -1,52 +1,34 @@
-anychart.onDocumentReady(function () {
-    fetch('https://ieee-registration.herokuapp.com/team/chart')
+(function chartLoader() {
+    fetch('http://127.0.0.1:5000/team/chart')
         .then(response => {
             if (!response.ok) throw new Error('Server encountered an error')
             return response.json()
         })
         .then(data => {
-            //ENTER THE CANDIDATE YEARS HERE (NUMBER OF FIRST, SECOND, THIRD AND FINAL YEAR)
-//             const chartData = {
-//                 header: ["YEAR", "CANDIDATES"],
-//                 rows: [
-//                     ["FIRST", data.First],
-//                     ["SECOND", data.Second],
-//                     ["THIRD", data.Third],
-//                     ["FINAL", data.Fourth]
-//                 ]
-//             };
-//
-//             // create the chart
-//             // let chart = anychart.bar();
-//
-//             // add data
-//
-//
-// // create the chart
-//             const chart = new anychart.column();
-//
-//             chart.data(chartData);
-//
-//             // set the chart title
-//             chart.title("YEARWISE CANDIDATE APPLICATION");
-//
-//             // draw
-//             chart.container("container");
-//             chart.draw();
-
             const ctx = document.getElementById('myChart').getContext('2d');
             const chart = new Chart(ctx, {
                 type: 'bar',
-                data:{
-                    labels: ['First','Second','Third','Final'],
-                    data:[data.First,data.Second,data.Third,data.Fourth]
+                data: {
+                    labels: ['First', 'Second', 'Third', 'Final'],
+                    datasets: [{
+                        label: 'Applications',
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        data: [data.First, data.Second, data.Third, data.Fourth]
+                    }]
+                },
+                options: {
+                    legend: {display: false},
+                    title: {
+                        display: true,
+                        text: 'YEARWISE CANDIDATE APPLICATION'
+                    }
                 }
             })
         })
         .catch(err => showMsg(err.message, 'danger'))
 
 
-});
+})();
 
 
 

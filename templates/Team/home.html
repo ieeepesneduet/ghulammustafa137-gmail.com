@@ -6,8 +6,8 @@
   <img src="{{ url_for('static',filename='images/home.png') }}" width = 100%>
 </div>
 <table>
-  <tr>
-    <td id="left-col">
+  <tr class="row">
+    <td class="col-md-6 col-lg-6" id="left-col">
 
       <img src="{{ url_for('static',filename='images/teamall.jpg') }}" style="max-width: 95%;margin-bottom: 50px;margin-top: -50px;">
             <h4 class="about head_about">
@@ -24,11 +24,8 @@
       </p>
       
     </td>
-    <td id="right-col">
-      <div class="col-md-12">
-{#        <div id="container" style="width: 100%; height: 600px;margin-top: -200px;"></div>#}
-      <canvas id="myChart"></canvas>
-      </div>
+    <td class="col-md-6 col-lg-6" id="right-col">
+        <canvas height="20%" width="20%" style="margin-top: 100px" id="myChart"></canvas>
     </td>
   </tr>
 </table>
