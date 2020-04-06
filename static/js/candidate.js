@@ -5,7 +5,7 @@
         e.preventDefault();
         const match = /\/candidate\/(All|First|Second|Third|Fourth)/.exec(window.location);
         const next = loadMoreForm.numOfRecords.value || 10;
-        fetch(`https://ieee-registration.herokuapp.com/candidate/${match[1]}/loadmore`,{
+        fetch(`https://ieee-registration.herokuapp.com/team/candidate/${match[1]}/loadmore`,{
             method:'post',
             headers: {
                     'Content-Type': 'application/json'

@@ -86,10 +86,10 @@
             </tbody>
         </table>
         <form method="post" id="loadMore">
-          <div class="form-group">
-           <input type="number" name="numOfRecords" class="form-control" placeholder="Enter number of records you want to load">
-           <input type="submit" name="submitBtn" class="btn btn-outline-dark" value="Load More" {{ 'disabled' if candidates|length < 10 else ''}}>
-          </div>
+            <div class="form-group">
+                <input type="number" name="numOfRecords" class="form-control" placeholder="Enter number of records you want to load">
+                <input type="submit" name="submitBtn" class="btn btn-outline-dark" value="Load More" {{ 'disabled' if candidates|length < 10 else ''}}>
+            </div>
         </form>
     </div>
     <script src="{{ url_for('static',filename='js/candidate.js') }}"></script>

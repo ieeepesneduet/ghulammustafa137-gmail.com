@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, session
+from flask import Flask, render_template, request, jsonify, session,redirect,url_for
 from sqlalchemy import create_engine, exc,func
 from sqlalchemy.orm import load_only,noload
 from models import *
@@ -29,10 +29,10 @@ def randomStringGenerator():
     return ''.join(randStr)
 
 
-@app.route('/registration', methods=['GET', 'POST'])
+@app.route('/candidatearea/registration', methods=['GET', 'POST'])
 def registration():
     if request.method == 'GET':
-        return render_template('CandidateArea/index.html',isReg=True)
+        return render_template('CandidateArea/index.html',isReg=True,title='IEEE Registration')
     else:
         firstName = request.form['firstName']
         email = request.form['email']
@@ -76,10 +76,10 @@ def registration():
             return jsonify(err='Your form is incomplete')
 
 
-@app.route('/status', methods=['GET', 'POST'])
+@app.route('/candidatearea/status', methods=['GET', 'POST'])
 def status():
     if request.method == 'GET':
-        return render_template('CandidateArea/status.html',isReg=False)
+        return render_template('CandidateArea/status.html',isReg=False,title='Registration Status')
     else:
         if request.is_json:
             sessionDB = Session()
@@ -102,12 +102,12 @@ class ValErr(Exception):
         self.message = message
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/team/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
         if 'email' in session:
-            return render_template('Team/home.html')
-        return render_template('Team/login.html')
+            return redirect(url_for('home'))
+        return render_template('Team/login.html',title='Login')
     else:
         email = request.form['email']
         password = request.form['password']
@@ -121,29 +121,29 @@ def login():
                     raise ValErr('Wrong password entered')
                 sessionDB.close()
                 session['email'] = email
-                return render_template('Team/home.html',isHome=True)
+                return redirect(url_for('home'))
             except ValErr as err:
                 sessionDB.close()
-                return render_template('Team/login.html',msg=err.message)
+                return render_template('Team/login.html',msg=err.message,title='Login')
         else:
-            return render_template('Team/login.html',msg='Email and/or password empty')
+            return render_template('Team/login.html',msg='Email and/or password empty',title='Login')
 
 
-@app.route('/home')
+@app.route('/team/home')
 def home():
     if 'email' in session:
-        return render_template('Team/home.html',isHome=True)
+        return render_template('Team/home.html',isHome=True,title='Home')
     else:
-        return render_template('Team/login.html',msg='You need to login first to access this area')
+        return redirect(url_for('login'))
 
 
-@app.route('/logout')
+@app.route('/team/logout')
 def logout():
     session.pop('email', None)
-    return render_template('Team/login.html')
+    return redirect(url_for('login'))
 
 
-@app.route('/chart')
+@app.route('/team/chart')
 def chart():
     sessionDB = Session()
     data = sessionDB.query(Registration.year,func.count(Registration.year)).group_by(Registration.year).all()
@@ -154,7 +154,7 @@ def chart():
     return jsonify(yearDict)
 
 
-@app.route('/candidate/<string:year>/loadmore',methods=['POST'])
+@app.route('/team/candidate/<string:year>/loadmore',methods=['POST'])
 def loadMore(year):
     try:
         if not 'email' in session:
@@ -178,7 +178,7 @@ def loadMore(year):
         return jsonify(err=err.message)
 
 
-@app.route('/candidate/<string:year>')
+@app.route('/team/candidate/<string:year>')
 def candidate(year):
     if 'email' in session:
         sessionDB = Session()

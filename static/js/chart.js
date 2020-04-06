@@ -1,5 +1,5 @@
 anychart.onDocumentReady(function () {
-    fetch('https://ieee-registration.herokuapp.com/chart')
+    fetch('https://ieee-registration.herokuapp.com/team/chart')
         .then(response => {
             if (!response.ok) throw new Error('Server encountered an error')
             return response.json()
