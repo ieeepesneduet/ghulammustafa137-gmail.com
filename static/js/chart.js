@@ -23,7 +23,7 @@ anychart.onDocumentReady(function () {
 
 
 // create the chart
-            const chart = anychart.column();
+            const chart = new anychart.column();
 
             chart.data(chartData);
 
