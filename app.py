@@ -132,7 +132,7 @@ def login():
 @app.route('/team/home')
 def home():
     if 'email' in session:
-        return render_template('Team/home.html',isHome=True,title='Home')
+        return render_template('Team/home.html',title='Home')
     else:
         return redirect(url_for('login'))
 
