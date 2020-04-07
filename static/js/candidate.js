@@ -1,10 +1,9 @@
 (function handleLoadMore(){
     let offset = 10;
-    const loadMoreForm = document.getElementById('loadMore');
-    loadMoreForm.onsubmit = function(e){
-        e.preventDefault();
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+    loadMoreBtn.onclick = function(){
         const match = /\/candidate\/(All|First|Second|Third|Fourth)/.exec(window.location);
-        const next = loadMoreForm.numOfRecords.value || 10;
+        const next = document.getElementById('numRecords').value || 10;
         fetch(`https://ieee-registration.herokuapp.com/team/candidate/${match[1]}/loadmore`,{
             method:'post',
             headers: {
@@ -33,7 +32,7 @@
                             </tr>`;
                 }
                 if(data.length < next)
-                    loadMoreForm.submitBtn.disabled = true;
+                    loadMoreBtn.disabled = true;
                 document.getElementById('tableBody').insertAdjacentHTML('beforeend',html);
                 offset += data.length;
             })

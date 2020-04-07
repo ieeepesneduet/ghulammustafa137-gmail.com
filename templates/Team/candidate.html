@@ -55,7 +55,8 @@
     <br/>
     <div class="container-fluid">
         <div class="titletable">
-            <div class="col-lg-12 col-sm-12" id="candidate">Candidates List</div>
+            <div class="col-lg-12 col-sm-12" id="candidate">Candidates List<input style="width: 35%;float:right;" type="number" id="numRecords" class="form-control" placeholder="Enter number of records you want to load">
+</div>
         </div>
         <table class="table">
             <thead class="thead-dark">
@@ -85,12 +86,9 @@
             {% endfor %}
             </tbody>
         </table>
-        <form method="post" id="loadMore">
-            <div class="form-group">
-                <input type="number" name="numOfRecords" class="form-control" placeholder="Enter number of records you want to load">
-                <input type="submit" name="submitBtn" class="btn btn-outline-dark" value="Load More" {{ 'disabled' if candidates|length < 10 else ''}}>
-            </div>
-        </form>
+
+        <button style="margin:15px auto;display: block;" id="loadMoreBtn" class="btn btn-outline-dark" {{ 'disabled' if candidates|length < 10 else ''}}>Load More</button>
+
     </div>
     <script src="{{ url_for('static',filename='js/candidate.js') }}"></script>
 
