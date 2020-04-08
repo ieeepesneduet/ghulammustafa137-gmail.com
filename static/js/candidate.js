@@ -38,4 +38,10 @@
             })
             .catch(err => showMsg(err.message,'danger'))
     }
+    const inputRecords = document.getElementById('numRecords');
+    inputRecords.onkeypress = function(e){
+        if(e.code === 'Enter' && !loadMoreBtn.disabled){
+            loadMoreBtn.click();
+        }
+    }
 })();
