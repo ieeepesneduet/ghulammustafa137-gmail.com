@@ -44,14 +44,18 @@
 
     {% endif %}
 
+
+
     <div class="container-fluid">
         <div class="row" id="row">
             <div class="col-lg-4 col-sm-4"><a href="{{ url_for('home') }}" id="row1">Home ></a>
-                <a href="{{ url_for('candidate',year='All') }}" id="row3"> Candidates ></a>
-                <a href="{{ url_for('candidate',year=year) }}" id="row4"> {{ year }}</a></div>
+                <a href="{{ url_for('candidates',year='All') }}" id="row3"> Candidates ></a>
+                <a href="{{ url_for('candidates',year=year) }}" id="row4"> {{ year }}</a></div>
             <div class="col-lg-8 col-sm-8" id="row2"> Total Number Of Candidates: {{ numCandidates }}</div>
         </div>
     </div>
+
+    <div id="msg-box"></div>
     <br/>
     <div class="container-fluid">
         <div class="titletable">
@@ -80,16 +84,16 @@
                 <td>{{ candidate.year if year == 'All' else year}}</td>
                 <td>{{ candidate.discipline }}</td>
                 <td>
-                    <button type="button" class="btn btn-success">Turn In</button>
+                    <button id="{{ candidate.email }}" type="button" class="btn btn-success turninBtn">Turn In</button>
                 </td>
             </tr>
             {% endfor %}
             </tbody>
         </table>
 
-        <button style="margin:15px auto;display: block;" id="loadMoreBtn" class="btn btn-outline-dark" {{ 'disabled' if candidates|length < 10 else ''}}>Load More</button>
+        <button style="margin:15px auto;display: block;" id="loadMoreBtn" class="btn btn-outline-dark" {{ 'disabled' if numCandidates < 10 else ''}}>Load More</button>
 
     </div>
-    <script src="{{ url_for('static',filename='js/candidate.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/candidates.js') }}"></script>
 
 {% endblock %}

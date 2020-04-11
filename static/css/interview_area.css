@@ -1,0 +1,258 @@
+#navbar{
+    font-size: 20px;
+    background-color: rgb(255, 255, 255) !important ;
+}
+
+.dropdown:hover>.dropdown-menu {
+    display: block;
+}
+  
+
+  
+#navbar:hover{
+    color: #72D172 !important;
+    transition: 0.3s;
+}
+
+#candidiates{
+    font-size: 20px;
+    /* padding-bottom: 20px; */   
+    padding-right: 30px;
+}
+  
+  #candidiates:hover{
+    color: #15DE00 !important;
+    transition: 0.3s;
+    /* padding-right: 100px !important;  */
+  }
+
+  #home{
+    font-size: 20px;
+    /* padding-bottom: 20px; */
+    padding-right: 30px;
+  }
+  
+  #home:hover{
+    color: #22C222 !important;
+    transition: 0.3s;
+  }
+
+  #inter{
+    font-size: 20px;
+    /* padding-bottom: 20px; */
+    padding-right: 30px;
+  }
+  
+  #inter:hover{
+    color: #22C222 !important;
+    transition: 0.3s;
+    
+  }
+
+  #logout{
+    font-size: 20px;
+  }
+
+  #search{
+    padding-right: 20px;
+    font-size: 18px;
+  }
+
+  .lside4{
+    font-family: 'Poppins', sans-serif;
+    border:1px solid #e6e6e6;
+    font-size: 13px;
+    letter-spacing: 1px;
+    padding: 10px 25px;
+    margin-top: 20px;
+    color: #555555;
+    padding-top: 30px;
+
+   
+  }
+  .card-img-top
+  {
+    margin-top: 30px;
+  }
+
+  #row1in{
+    
+    font-family: 'Poppins', sans-serif;
+    border:1px solid #e6e6e6;
+    font-size: 13px;
+    letter-spacing: 1px;
+    padding: 10px 25px;
+    margin-top: 20px;
+    color: #555555; 
+  }
+
+  #row2in{
+    font-family: 'Poppins', sans-serif;
+    border:1px solid #e6e6e6;
+    font-size: 13px;
+    letter-spacing: 1px;
+    padding: 10px 25px;
+    margin-top: 20px;
+    color: #555555; 
+
+  }
+
+  #row3in{
+    font-family: 'Poppins', sans-serif;
+    border:1px solid #e6e6e6;
+    font-size: 13px;
+    letter-spacing: 1px;
+    padding: 10px 25px;
+    margin-top: 20px;
+    color: #555555; 
+  }
+
+  #row4in{
+    font-family: 'Poppins', sans-serif;
+    border:1px solid #e6e6e6;
+    font-size: 13px;
+    letter-spacing: 1px;
+    padding: 10px 25px;
+    margin-top: 20px;
+    color: #555555; 
+  }
+
+ .answer_here
+ {
+    font-family: 'Poppins', sans-serif;
+    border:1px solid #e6e6e6;
+    border-top: none;
+    font-size: 13px;
+    text-align: center;
+    letter-spacing: 1px;
+    padding: 10px 25px;
+    color: #34a132; 
+ }
+
+  
+  
+  
+  /* #rside2{
+    font-size: 20px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: black;
+    font-weight: normal; 
+  }
+  #rtopside2{
+    /* padding-top: 50px; */
+
+
+  /* #rside3{
+    font-size: 20px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: black;
+    font-weight: normal; 
+  } */
+  /* #rtopside3{
+    padding-top: 50px;
+  } */
+.formdrop{
+  /* margin-top: 20px; */
+}
+
+#textarea{
+  font-size: 22px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: black;
+    font-weight: normal; 
+    padding-top: 20px;
+    
+}
+#textkaarea{
+  font-family: 'Poppins', sans-serif;
+    border:1px solid #e6e6e6;
+    font-size: 13px;
+    letter-spacing: 1px;
+    padding: 10px 10px;
+    border-top: none;
+    color: #555555; 
+   
+}
+
+#turnout,#dont{
+  font-family: 'Poppins', sans-serif;
+  
+  margin-top: 30px;
+  text-align: right;
+  color: white !important;
+  font-size: 20px;
+}
+
+#rightside2{
+  padding-left: 10px;
+}
+
+.image_area
+{
+  text-align: center;
+}
+
+.form-group
+{
+    font-family: 'Poppins', sans-serif;
+    border:1px solid #e6e6e6;
+    font-size: 13px;
+    letter-spacing: 1px;
+    padding: 10px 10px;
+    margin-top: 20px;
+    color: #555555; 
+    text-align: center;
+}
+
+.remarks_area
+{
+    font-family: 'Poppins', sans-serif;
+    border:1px solid #e6e6e6;
+    font-size: 13px;
+    letter-spacing: 1px;
+    padding: 10px 10px;
+    margin-top: 20px;
+    color: #606A6B; 
+    text-align: center;
+}
+
+
+
+#foooter{
+  width: 100%;
+  background-color: #72D172;
+color:black;
+padding:15px;
+border-top:3px solid white;
+text-align:center;
+font-size:17px;
+}
+
+select
+{
+  border:0px;
+  outline: 0px;
+  background-color: #34a132;
+  color: white;
+  border-radius: 25px;
+  
+
+
+}
+.applying_margin
+{
+  margin-top: 50px;
+}
+
+#imp{
+  display: inline-block !important;
+  margin: 2px !important;
+}
+#foooter span{
+color:green;
+cursor:default;
+}
+#foooter span:hover{
+color:whitesmoke;
+/* text-decoration:underline; */
+}

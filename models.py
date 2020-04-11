@@ -1,5 +1,6 @@
-from sqlalchemy import Column,String,Boolean,LargeBinary,ForeignKey,Binary
+from sqlalchemy import Column,Boolean,LargeBinary,ForeignKey,Binary,CHAR,String
 from sqlalchemy.orm import relationship
+from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.ext.declarative import declarative_base
 
 base = declarative_base()
@@ -7,11 +8,11 @@ base = declarative_base()
 class Registration(base):
     __tablename__ = 'registration'
 
-    id = Column(String(5),primary_key=True)
+    id = Column(CHAR(5),primary_key=True)
     name = Column(String(32),nullable=False)
     email = Column(String(50),nullable=False,unique=True)
-    phone_number = Column(String(11),nullable=False)
-    cnic = Column(String(13),nullable=False,unique=True)
+    phone_number = Column(CHAR(11),nullable=False)
+    cnic = Column(CHAR(13),nullable=False,unique=True)
     year = Column(String(6),nullable=False)
     domain = Column(String(25),nullable=False)
     discipline = Column(String(30),nullable=False)
@@ -20,7 +21,10 @@ class Registration(base):
     why = Column(String,nullable=False)
     achievements = Column(String,nullable=True)
     status = Column(Boolean,default=False)
+    reviewed = Column(Boolean,default=False)
     imagestore = relationship("Imagestore", uselist=False, back_populates="registration")
+    interview = relationship("Interview", uselist=False, back_populates="registration")
+
 
     def __init__(self,id,name,email,phone_number,cnic,year,domain,discipline,about,association,why,achievements):
         self.id = id
@@ -40,7 +44,7 @@ class Registration(base):
 class Imagestore(base):
     __tablename__ = 'imagestore'
 
-    reg_id = Column(String(5), ForeignKey('registration.id'),primary_key=True)
+    reg_id = Column(CHAR(5), ForeignKey('registration.id'),primary_key=True)
     data = Column(LargeBinary, nullable=False)
     registration = relationship("Registration", back_populates="imagestore")
 
@@ -56,4 +60,12 @@ class Admin(base):
     def __init__(self,email,password):
         self.email=email
         self.password=password
+
+class Interview(base):
+    __tablename__='interview'
+
+    reg_id = Column(CHAR(5), ForeignKey('registration.id'),primary_key=True)
+    scores = Column(ARRAY(CHAR(1), dimensions=1),nullable=True)
+    remarks = Column(String,nullable=True)
+    registration = relationship("Registration", back_populates="interview")
 

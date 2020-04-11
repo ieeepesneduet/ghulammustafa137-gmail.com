@@ -27,7 +27,7 @@
                                 <td>${match[1] === 'All'? data[i].year:match[1]}</td>                                     
                                 <td>${data[i].discipline}</td>                               
                                 <td>                                                              
-                                    <button type="button" class="btn btn-success">Turn In</button>
+                                    <button id="${data[i].email}" type="button" class="btn btn-success turninBtn">Turn In</button>
                                 </td>                                                             
                             </tr>`;
                 }
@@ -44,4 +44,27 @@
             loadMoreBtn.click();
         }
     }
+
+    const tbody = document.getElementById('tableBody');
+    tbody.onclick = function(e){
+        if(e.target.tagName === 'BUTTON'){
+            fetch('https://ieee-registration.herokuapp.com/team/candidates/candidate/turnin',{
+                method:'post',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({email:e.target.id})
+            })
+                .then(response => {
+                    if(!response.ok) throw new Error('Server encountered an error')
+                    return response.json()
+                })
+                .then(data => {
+                    if(data.err) throw new Error(data.err);
+                    window.location = 'https://ieee-registration.herokuapp.com/team/candidates/candidate/turnin';
+                })
+                .catch(err => showMsg(err.message,'warning'))
+        }
+    }
+
 })();

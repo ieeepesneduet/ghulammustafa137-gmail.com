@@ -5,7 +5,9 @@
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.ico') }}"/>
     <link href="https://fonts.googleapis.com/css?family=Poppins&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/home.css') }}">
+    {% if page %}
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/'+page+'.css') }}">
+    {% endif %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
     <script src="{{ url_for('static', filename='vendor/jquery/jquery-3.2.1.min.js') }}"></script>
     <link rel="stylesheet" type="text/css"
@@ -38,16 +40,16 @@
                         Candidate
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown" id="dropdown">
-                        <a class="dropdown-item" href="{{ url_for('candidate',year='First') }}">First Year</a>
-                        <a class="dropdown-item" href="{{ url_for('candidate',year='Second') }}">Second Year</a>
-                        <a class="dropdown-item" href="{{ url_for('candidate',year='Third') }}">Third Year</a>
-                        <a class="dropdown-item" href="{{ url_for('candidate',year='Fourth') }}">Fourth Year</a>
+                        <a class="dropdown-item" href="{{ url_for('candidates',year='First') }}">First Year</a>
+                        <a class="dropdown-item" href="{{ url_for('candidates',year='Second') }}">Second Year</a>
+                        <a class="dropdown-item" href="{{ url_for('candidates',year='Third') }}">Third Year</a>
+                        <a class="dropdown-item" href="{{ url_for('candidates',year='Fourth') }}">Fourth Year</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="{{ url_for('candidate',year='All') }}">All Candidates</a>
+                        <a class="dropdown-item" href="{{ url_for('candidates',year='All') }}">All Candidates</a>
                     </div>
                 </li>
                 <li class="nav-item" id="nav-item">
-                    <a class="nav-link" href="#" style="color:black;">Interviews Completed</a>
+                    <a class="nav-link" href="{{ url_for('completed') }}" style="color:black;">Interviews Completed</a>
                 </li>
                 <li class="nav-item" id="nav-item">
                     <a class="nav-link" href="{{ url_for('logout') }}" style="color:black;">Logout</a>
@@ -65,7 +67,9 @@
         </div>
     </nav>
 </div>
-<div id="msg-box"></div>
+{% if not year %}
+    <div id="msg-box"></div>
+{% endif %}
 {% block content %}{% endblock %}
 
 <div class="container-fluid" id="footer">
