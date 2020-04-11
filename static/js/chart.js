@@ -5,6 +5,7 @@
             return response.json()
         })
         .then(data => {
+            console.log(data);
             const ctx = document.getElementById('myChart').getContext('2d');
             const chart = new Chart(ctx, {
                 type: 'bar',
