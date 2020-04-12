@@ -20,7 +20,7 @@
         if(experience && interview && potential && remarks){
             showMsg('','danger');
             URL.revokeObjectURL(img.src);
-            fetch('https://ieee-registration.herokuapp.com/team/candidates/candidate/turnout',{
+            fetch(fetchUrl+'/team/candidates/candidate/turnout',{
                 method:'post',
                 headers: {
                     'Content-Type': 'application/json'
@@ -33,7 +33,7 @@
                 })
                 .then(data => {
                     if(data.err) throw new Error(data.err);
-                    window.location = 'https://ieee-registration.herokuapp.com/team/candidates/All';
+                    window.location = fetchUrl+'/team/candidates/All';
                 })
                 .catch(err => showMsg(err.message,'danger'))
         }else{

@@ -54,7 +54,12 @@
             <div class="col-lg-8 col-sm-8" id="row2"> Total Number Of Candidates: {{ numCandidates }}</div>
         </div>
     </div>
-
+    <form id="stuck" class="form-inline" method="post">
+  <div class="form-group">
+    <input style="width: 30rem;margin: 0 17px;" type="email" class="form-control" name="email" aria-describedby="emailHelp" placeholder="Enter email of the applicant who is stuck in the interview area" required>
+  </div>
+  <button type="submit" class="btn btn-outline-danger">Submit</button>
+</form>
     <div id="msg-box"></div>
     <br/>
     <div class="container-fluid">

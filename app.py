@@ -7,9 +7,11 @@ from os import environ
 from random import randint
 from bcrypt import checkpw
 from flask import Response
+from flask_sslify import SSLify
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 app = Flask(__name__)
+sslify = SSLify(app)
 app.config['MAX_CONTENT_LENGTH'] = 500 * 1024 - 1
 app.secret_key = b'\x01Jt\xbc!E5k\x8b]\xe1\xdd0p\xb7Q'
 db = create_engine(environ['DATABASE_URL'])
@@ -34,18 +36,18 @@ def registration():
     if request.method == 'GET':
         return render_template('CandidateArea/index.html', isReg=True, title='IEEE Registration')
     else:
-        firstName = request.form['firstName']
-        email = request.form['email']
-        phoneNumber = request.form['phoneNumber']
-        cnic = request.form['cnic']
-        year = request.form['year']
-        domain = request.form['domain']
-        discipline = request.form['discipline']
-        about = request.form['about']
-        association = request.form['association']
-        why = request.form['why']
-        achievements = request.form['achievements']
-        image = request.files['image']
+        firstName = request.form.get('firstName')
+        email = request.form.get('email')
+        phoneNumber = request.form.get('phoneNumber')
+        cnic = request.form.get('cnic')
+        year = request.form.get('year')
+        domain = request.form.get('domain')
+        discipline = request.form.get('discipline')
+        about = request.form.get('about')
+        association = request.form.get('association')
+        why = request.form.get('why')
+        achievements = request.form.get('achievements')
+        image = request.files.get('image')
         if firstName and email and phoneNumber and len(phoneNumber) == 11 and cnic and len(
                 cnic) == 13 and year and domain and discipline and about and association and why and achievements and image:
             fileType = file_type(image.filename)
@@ -264,7 +266,7 @@ def image():
             raise ValErr('')
         sessionDB = Session()
         dataBinary = sessionDB.query(Imagestore).options(load_only('data')).filter(
-            Imagestore.reg_id == session['appId']).scalar()
+            Imagestore.reg_id == session.get('appId')).scalar()
         sessionDB.close()
         return Response(dataBinary.data, content_type='application/octet-stream')
     except ValErr as err:
@@ -276,7 +278,7 @@ def turnout():
     if request.method == 'GET':
         if 'appId' in session and 'email' in session:
             sessionDB = Session()
-            data = sessionDB.query(Interview).filter(Interview.reg_id == session['appId']).scalar()
+            data = sessionDB.query(Interview).filter(Interview.reg_id == session.get('appId')).scalar()
             sessionDB.delete(data)
             sessionDB.commit()
             sessionDB.close()
@@ -296,11 +298,12 @@ def turnout():
                     'experience' in reqData and 'interview' in reqData and 'potential' in reqData and 'remarks' in reqData):
                 raise ValErr('missing data in request')
             sessionDB = Session()
-            sessionDB.query(Interview).filter(Interview.reg_id == session['appId']).update(
+            data=sessionDB.query(Interview).filter(Interview.reg_id == session.get('appId')).update(
                 {'scores': [reqData['experience'], reqData['interview'], reqData['potential']],
                  'remarks': reqData['remarks']})
-            sessionDB.query(Registration).filter(Registration.id == session['appId']).update({'reviewed': True})
-            sessionDB.commit()
+            if data == 1:
+                sessionDB.query(Registration).filter(Registration.id == session.get('appId')).update({'reviewed': True})
+                sessionDB.commit()
             sessionDB.close()
             session.pop('appId', None)
             return jsonify()
@@ -343,6 +346,25 @@ def completed():
             return jsonify(dataList)
         except ValErr as err:
             return jsonify(err=err.message)
+
+@app.route("/team/candidate/stuck",methods=['POST'])
+def stuck():
+    if 'email' in session:
+        email=request.form.get('email')
+        if email:
+            sessionDB = Session()
+            data=sessionDB.query(Registration).join(Registration.interview).filter(Registration.email==email,Registration.reviewed==False).scalar()
+            if data is None:
+                sessionDB.close()
+                return jsonify(err='No such applicant exists')
+            sessionDB.delete(data.interview)
+            sessionDB.commit()
+            sessionDB.close()
+            return jsonify(msg='Success.Now you should be able to interview applicant again')
+        return jsonify(err='no email submitted')
+    return jsonify(err='login to submit email')
+
+
 
 
 if __name__ == '__main__':

@@ -1,5 +1,5 @@
 (function chartLoader() {
-    fetch('https://ieee-registration.herokuapp.com/team/chart')
+    fetch(fetchUrl+'/team/chart')
         .then(response => {
             if (!response.ok) throw new Error('Server encountered an error')
             return response.json()
@@ -22,6 +22,13 @@
                     title: {
                         display: true,
                         text: 'YEARWISE CANDIDATE APPLICATION'
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
                     }
                 }
             })

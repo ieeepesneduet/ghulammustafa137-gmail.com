@@ -3,7 +3,7 @@
     const loadMoreBtn = document.getElementById('loadMoreBtn');
     loadMoreBtn.onclick = function(){
         const next = document.getElementById('numRecords').value || 10;
-        fetch(`https://ieee-registration.herokuapp.com/team/completed`,{
+        fetch(fetchUrl+`/team/completed`,{
             method:'post',
             headers: {
                     'Content-Type': 'application/json'
