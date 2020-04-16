@@ -28,9 +28,36 @@
     </td>
   </tr>
 </table>
-   
-
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
-  <script type="text/javascript" src="{{ url_for('static' ,filename='js/chart.js') }}"></script>
+    <script>
+    const None = 0;
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['First', 'Second', 'Third', 'Final'],
+                    datasets: [{
+                        label: 'Applications',
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        data: [{{ data.get('First') }}, {{ data.get('Second') }}, {{ data.get('Third') }}, {{ data.get('Fourth') }}]
+                    }]
+                },
+                options: {
+                    legend: {display: false},
+                    title: {
+                        display: true,
+                        text: 'YEARWISE CANDIDATE APPLICATION'
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            })
+
+    </script>
 
 {% endblock %}

@@ -20,13 +20,13 @@
                 for(let i=0;i<data.length;i++){
                     html += `<tr>                                                                  
                                 <th scope="row">${i+1+offset}</th>                             
-                                <td>${data[i].name}</td>                                     
-                                <td>${data[i].email}</td>                                    
-                                <td>${data[i].phone_number}</td>                             
-                                <td>${data[i].year}</td>                                     
-                                <td>${data[i].discipline}</td>                               
+                                <td>${data[i][0]}</td>                                     
+                                <td>${data[i][1]}</td>                                    
+                                <td>${data[i][2]}</td>                             
+                                <td>${data[i][3]}</td>                                     
+                                <td>${data[i][4]}</td>                               
                                 <td>  
-                                     <a href="#" class="btn1 btn-primary btn-sm"
+                                     <a href="/team/completed/${data[i][1]}" class="btn1 btn-primary btn-sm"
                                    style="text-decoration: none;">View<span
                                     class="underscroll">_</span>Details</a>                                                            
                                 </td>                                                             
@@ -44,6 +44,15 @@
         if(e.code === 'Enter' && !loadMoreBtn.disabled){
             loadMoreBtn.click();
         }
+    }
+    const noBtn = document.getElementById('noBtn');
+    noBtn.onclick = function(){
+        document.getElementById('confirmBox').style.display='none';
+    }
+
+    const releaseBtn = document.getElementById('release');
+    releaseBtn.onclick = function(){
+        document.getElementById('confirmBox').style.display='block';
     }
 
 })();

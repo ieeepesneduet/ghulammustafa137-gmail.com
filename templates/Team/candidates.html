@@ -81,7 +81,7 @@
             </thead>
             <tbody id="tableBody">
             {% for candidate in candidates %}
-            <tr>
+            <tr id="{{ candidate.email }}">
                 <th scope="row">{{ loop.index }}</th>
                 <td>{{ candidate.name }}</td>
                 <td>{{ candidate.email }}</td>
@@ -89,7 +89,7 @@
                 <td>{{ candidate.year if year == 'All' else year}}</td>
                 <td>{{ candidate.discipline }}</td>
                 <td>
-                    <button id="{{ candidate.email }}" type="button" class="btn btn-success turninBtn">Turn In</button>
+                    <button data-email="{{ candidate.email }}" type="button" class="btn btn-success turninBtn">Turn In</button>
                 </td>
             </tr>
             {% endfor %}

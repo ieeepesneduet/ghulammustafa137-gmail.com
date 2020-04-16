@@ -1,7 +1,9 @@
 {% extends 'Team/layout.html' %}
 {% block content %}
-    <div class="alert alert-primary" role="alert">Make sure you either turnout this application or press Don't want to interview</div>
-    <img src="{{ url_for('static',filename='images/interview_area.png') }}" class="img-fluid" alt="Responsive image">
+
+    <img src="{{ url_for('static',filename='images/result.png') }}" class="img-fluid" alt="Responsive image">
+
+
 
 
     <div class="container-fluid" style="background-color:rgb(255, 255, 255);">
@@ -34,8 +36,8 @@
                         <label for="input">
 
                             Enter score for Experience(0-4)
-                            <span id="rside1" style="color:#3AA145;">  <select name="experience" required
-                                                                               class="ml-3"
+                            <span id="rside1" style="color:#3AA145;">  <select disabled name="experience" required
+                                                                               class="ml-3 editable scores"
                                                                                style=" width: initial;">
 			                    <option value="0">0</option>
 			                    <option value="1">1</option>
@@ -54,8 +56,8 @@
                         <label for="input">
 
                             Enter score for Interview(0-4)
-                            <span id="rside1" style="color:#3AA145;">  <select name="interview" required
-                                                                               class="ml-3"
+                            <span id="rside1" style="color:#3AA145;">  <select disabled name="interview" required
+                                                                               class="ml-3 editable scores"
                                                                                style=" width: initial;">
 			                   <option value="0">0</option>
 			                    <option value="1">1</option>
@@ -74,8 +76,8 @@
                         <label for="input">
 
                             Enter score for Potential(0-4)
-                            <span id="rside1" style="color:#3AA145;">  <select name="potential" required
-                                                                               class="ml-3"
+                            <span id="rside1" style="color:#3AA145;">  <select disabled name="potential" required
+                                                                               class="ml-3 editable scores"
                                                                                style=" width: initial;">
 			                    <option value="0">0</option>
 			                    <option value="1">1</option>
@@ -125,20 +127,31 @@
                         </label>
 
                     </div>
-                    <textarea name="remarks" id="textkaarea" class="form-control"
+                    <textarea name="remarks" disabled id="textkaarea" class="form-control editable"
                               id="exampleFormControlTextarea1" rows="10"
-                              required></textarea>
+                              required>{{ data.interview.remarks }}</textarea>
 
 
                     <div style="background-color:rgb(255, 255, 255);">
-                        <p align="left"> <button type="submit" class="btn btn-success interviewBtn">Turn Out</button>
-                        <button id="dont" type="button" class="btn btn-danger interviewBtn">Don't want to interview</button>
-			        </p>
+                        <p align="left">
+                            <button id="edit" type="button" class="btn btn-primary interviewBtn">Edit</button>
+                            <button type="submit" class="btn btn-success editable interviewBtn" disabled>Save
+                                Changes
+                            </button>
+                        </p>
                     </div>
                 </div>
             </div>
         </form>
     </div>
-    <script src="{{ url_for('static',filename='js/interviewArea.js') }}"></script>
-    <!-- form close -->
-    {% endblock %}
+    <script>
+        const scores = document.getElementsByClassName('scores');
+        scores[0].value = '{{ data.interview.scores[0] }}';
+        scores[1].value = '{{ data.interview.scores[1] }}';
+        scores[2].value = '{{ data.interview.scores[2] }}';
+        const id = '{{ data.id }}';
+    </script>
+
+    <script src="{{ url_for('static',filename='js/interviewDetails.js') }}"></script>
+
+{% endblock %}

@@ -1,13 +1,13 @@
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 from sqlalchemy import create_engine, exc, func
-from sqlalchemy.orm import load_only, noload
+from sqlalchemy.orm import load_only, noload, joinedload
 from models import *
 from sqlalchemy.orm import sessionmaker
 from os import environ
 from random import randint
 from bcrypt import checkpw
-from flask import Response
 from flask_sslify import SSLify
+from base64 import b64encode
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 app = Flask(__name__)
@@ -87,9 +87,15 @@ def status():
             sessionDB = Session()
             data = sessionDB.query(Registration).options(noload('imagestore')).get(request.get_json()['id'])
             if data is None:
-                sessionDB.close()
-                return jsonify(err='Invalid ID')
-            json = jsonify(a=data.name, b=data.year, c=data.email, d=data.phone_number, e=data.cnic, f=data.domain,
+                json = jsonify(err='Invalid ID')
+            else:
+                if(data.status):
+                    json = jsonify(a=data.name, b=data.year, c=data.email, d=data.phone_number, e=data.cnic,
+                                   f=data.domain,
+                                   g=data.discipline, h=data.about, i=data.association, j=data.why, k=data.achievements,
+                                   l=data.status,m=data.interview.scores[0],n=data.interview.scores[1],o=data.interview.scores[2],p=data.interview.remarks)
+                else:
+                    json = jsonify(a=data.name, b=data.year, c=data.email, d=data.phone_number, e=data.cnic, f=data.domain,
                            g=data.discipline, h=data.about, i=data.association, j=data.why, k=data.achievements,
                            l=data.status)
             sessionDB.close()
@@ -134,7 +140,13 @@ def login():
 @app.route('/team/home')
 def home():
     if 'email' in session:
-        return render_template('Team/home.html', title='Home', page='home')
+        sessionDB = Session()
+        data = sessionDB.query(Registration.year, func.count(Registration.year)).group_by(Registration.year).all()
+        sessionDB.close()
+        yearDict = {}
+        for year in data:
+            yearDict[year[0]] = year[1]
+        return render_template('Team/home.html', title='Home', page='home', data=yearDict)
     else:
         return redirect(url_for('login'))
 
@@ -143,17 +155,6 @@ def home():
 def logout():
     session.pop('email', None)
     return redirect(url_for('login'))
-
-
-@app.route('/team/chart')
-def chart():
-    sessionDB = Session()
-    data = sessionDB.query(Registration.year, func.count(Registration.year)).group_by(Registration.year).all()
-    sessionDB.close()
-    yearDict = {}
-    for year in data:
-        yearDict[year[0]] = year[1]
-    return jsonify(yearDict)
 
 
 @app.route('/team/candidates/<string:year>/loadmore', methods=['POST'])
@@ -171,19 +172,19 @@ def loadMore(year):
         if year == 'All':
             for application in sessionDB.query(Registration).options(
                     load_only('name', 'email', 'phone_number', 'discipline', 'year')).filter(
-                Registration.reviewed == False).offset(reqData['offset']).limit(
+                Registration.reviewed == False,Registration.status==False).offset(reqData['offset']).limit(
                 reqData['next']):
                 dataList.append(
-                    {'name': application.name, 'email': application.email, 'phone_number': application.phone_number,
-                     'year': application.year, 'discipline': application.discipline})
+                    [application.name,application.email,application.phone_number,
+                      application.discipline,application.year])
         else:
             for application in sessionDB.query(Registration).options(
                     load_only('name', 'email', 'phone_number', 'discipline')).filter(Registration.year == year,
-                                                                                     Registration.reviewed == False).offset(
+                                                                                     Registration.reviewed == False,Registration.status==False).offset(
                 reqData['offset']).limit(reqData['next']):
                 dataList.append(
-                    {'name': application.name, 'email': application.email, 'phone_number': application.phone_number,
-                     'discipline': application.discipline})
+                    [application.name,application.email,application.phone_number,
+                     application.discipline])
         sessionDB.close()
         return jsonify(dataList)
     except ValErr as err:
@@ -195,16 +196,16 @@ def candidates(year):
     if 'email' in session:
         sessionDB = Session()
         if year == 'All':
-            dataCount = sessionDB.query(func.count(Registration.id)).filter(Registration.reviewed == False).scalar()
+            dataCount = sessionDB.query(func.count(Registration.id)).filter(Registration.reviewed == False,Registration.status==False).scalar()
             data = sessionDB.query(Registration).options(
                 load_only('name', 'email', 'phone_number', 'discipline', 'year')).filter(
-                Registration.reviewed == False).limit(10).all()
+                Registration.reviewed == False,Registration.status==False).limit(10).all()
         else:
             dataCount = sessionDB.query(func.count(Registration.id)).filter(Registration.year == year,
-                                                                            Registration.reviewed == False).scalar()
+                                                                            Registration.reviewed == False,Registration.status==False).scalar()
             data = sessionDB.query(Registration).options(
                 load_only('name', 'email', 'phone_number', 'discipline')).filter(Registration.year == year,
-                                                                                 Registration.reviewed == False).limit(
+                                                                                 Registration.reviewed == False,Registration.status==False).limit(
                 10).all()
         sessionDB.close()
         return render_template('Team/candidates.html', year=year, numCandidates=dataCount, candidates=data,
@@ -218,13 +219,16 @@ def turnin():
     if request.method == 'GET':
         if 'email' in session and 'appId' in session:
             sessionDB = Session()
-            data = sessionDB.query(Registration).options(noload('imagestore'),
+            data = sessionDB.query(Registration).options(joinedload('imagestore'),
                                                          load_only('name', 'email', 'phone_number', 'year', 'domain',
                                                                    'discipline', 'about', 'association', 'why',
                                                                    'achievements')).filter(
-                Registration.id == session['appId']).scalar()
+                Registration.id == session['appId'],Registration.reviewed==False,Registration.status==False).scalar()
+            image = b64encode(data.imagestore.data).decode("utf-8")
+
             sessionDB.close()
-            return render_template('Team/interviewArea.html', data=data, page='interview_area')
+            return render_template('Team/interviewArea.html', data=data, page='interview_area', title='Interview Area',
+                                   image=image)
         else:
             return redirect(url_for('login'))
     else:
@@ -241,7 +245,7 @@ def turnin():
                 raise ValErr('missing data in request')
             sessionDB = Session()
             data = sessionDB.query(Registration).options(load_only('id')).filter(
-                Registration.email == reqData['email']).scalar()
+                Registration.email == reqData['email'],Registration.reviewed==False,Registration.status==False).scalar()
             if data is None:
                 sessionDB.close()
                 raise ValErr('no such record exists')
@@ -257,22 +261,6 @@ def turnin():
             return jsonify(err=err.message)
 
 
-@app.route('/team/candidates/candidate/image', methods=['GET'])
-def image():
-    try:
-        if not 'email' in session:
-            raise ValErr('')
-        if not 'appId' in session:
-            raise ValErr('')
-        sessionDB = Session()
-        dataBinary = sessionDB.query(Imagestore).options(load_only('data')).filter(
-            Imagestore.reg_id == session.get('appId')).scalar()
-        sessionDB.close()
-        return Response(dataBinary.data, content_type='application/octet-stream')
-    except ValErr as err:
-        return Response('', status=500, content_type='application/octet-stream')
-
-
 @app.route('/team/candidates/candidate/turnout', methods=['GET', 'POST'])
 def turnout():
     if request.method == 'GET':
@@ -283,46 +271,45 @@ def turnout():
             sessionDB.commit()
             sessionDB.close()
             session.pop('appId', None)
-
-        return redirect(url_for('candidates', year='All'))
+        return jsonify()
     else:
-        try:
-            if not 'email' in session:
-                raise ValErr('Login to turnout')
-            if not 'appId' in session:
-                raise ValErr('Turn in to turnout')
-            if not request.is_json:
-                raise ValErr('Invalid request json')
-            reqData = request.get_json()
-            if not (
-                    'experience' in reqData and 'interview' in reqData and 'potential' in reqData and 'remarks' in reqData):
-                raise ValErr('missing data in request')
-            sessionDB = Session()
-            data=sessionDB.query(Interview).filter(Interview.reg_id == session.get('appId')).update(
-                {'scores': [reqData['experience'], reqData['interview'], reqData['potential']],
-                 'remarks': reqData['remarks']})
-            if data == 1:
-                sessionDB.query(Registration).filter(Registration.id == session.get('appId')).update({'reviewed': True})
-                sessionDB.commit()
-            sessionDB.close()
-            session.pop('appId', None)
-            return jsonify()
-        except ValErr as err:
-            return jsonify(err=err.message)
-
+        if 'appId' in session and 'email' in session:
+            experience = request.form.get('experience')
+            interview = request.form.get('interview')
+            potential = request.form.get('potential')
+            remarks = request.form.get('remarks')
+            if experience and interview and potential and remarks:
+                sessionDB = Session()
+                data = sessionDB.query(Interview).filter(Interview.reg_id == session.get('appId')).update(
+                    {'scores': [experience,interview,potential],
+                     'remarks': remarks})
+                if data == 1:
+                    sessionDB.query(Registration).filter(Registration.id == session.get('appId'),Registration.status==False,Registration.reviewed==False).update({'reviewed': True})
+                    sessionDB.commit()
+                    json = jsonify()
+                else:
+                    json = jsonify(err='This applicant was stuck in interview process')
+                sessionDB.close()
+                session.pop('appId', None)
+                return json
+            else:
+                return jsonify(err='Incomplete form submitted')
+        else:
+            return jsonify(err='login to submit this form')
+        
 
 @app.route('/team/completed', methods=['GET', 'POST'])
 def completed():
     if request.method == 'GET':
         if 'email' in session:
             sessionDB = Session()
-            dataCount = sessionDB.query(func.count(Registration.id)).filter(Registration.reviewed == True).scalar()
+            dataCount = sessionDB.query(func.count(Registration.id)).filter(Registration.reviewed == True,Registration.status==False).scalar()
             data = sessionDB.query(Registration).options(
                 load_only('name', 'email', 'phone_number', 'discipline', 'year')).filter(
-                Registration.reviewed == True).limit(10).all()
+                Registration.reviewed == True,Registration.status==False).limit(10).all()
             sessionDB.close()
             return render_template('Team/interview_completed.html', numCandidates=dataCount, candidates=data,
-                                   title='Completed Interviews',year=True,page='interview_completed')
+                                   title='Completed Interviews', year=True, page='interview_completed')
         return redirect(url_for('login'))
     else:
         try:
@@ -336,24 +323,26 @@ def completed():
             sessionDB = Session()
             dataList = []
             for application in sessionDB.query(Registration).options(
-                load_only('name', 'email', 'phone_number', 'discipline', 'year')).filter(
-                Registration.reviewed == True).offset(reqData['offset']).limit(
+                    load_only('name', 'email', 'phone_number', 'discipline', 'year')).filter(
+                Registration.reviewed == True,Registration.status==False).offset(reqData['offset']).limit(
                 reqData['next']):
                 dataList.append(
-                {'name': application.name, 'email': application.email, 'phone_number': application.phone_number,
-                 'year': application.year, 'discipline': application.discipline})
+                    [application.name,application.email,application.phone_number,
+                     application.year,application.discipline])
             sessionDB.close()
             return jsonify(dataList)
         except ValErr as err:
             return jsonify(err=err.message)
 
-@app.route("/team/candidate/stuck",methods=['POST'])
+
+@app.route("/team/candidate/stuck", methods=['POST'])
 def stuck():
     if 'email' in session:
-        email=request.form.get('email')
+        email = request.form.get('email')
         if email:
             sessionDB = Session()
-            data=sessionDB.query(Registration).join(Registration.interview).filter(Registration.email==email,Registration.reviewed==False).scalar()
+            data = sessionDB.query(Registration).join(Registration.interview).filter(Registration.email == email,
+                                                                                     Registration.reviewed == False,Registration.status==False).scalar()
             if data is None:
                 sessionDB.close()
                 return jsonify(err='No such applicant exists')
@@ -365,6 +354,49 @@ def stuck():
     return jsonify(err='login to submit email')
 
 
+@app.route("/team/completed/<string:e>", methods=['GET', 'POST'])
+def candidateDetails(e):
+    if request.method == 'GET':
+        if 'email' in session:
+            sessionDB = Session()
+            data = sessionDB.query(Registration).options(joinedload(Registration.interview),
+                                                         joinedload(Registration.imagestore)).filter(
+                Registration.email == e, Registration.reviewed == True,Registration.status==False).scalar()
+            sessionDB.close()
+            if data is None:
+                return redirect(url_for('completed'))
+            image = b64encode(data.imagestore.data).decode("utf-8")
+            return render_template('Team/interview_details.html', data=data, page='interview_area',
+                                   title='Interview Details', image=image)
+        else:
+            return redirect(url_for('login'))
+    else:
+        experience = request.form.get('experience')
+        interview = request.form.get('interview')
+        potential = request.form.get('potential')
+        remarks = request.form.get('remarks')
+        if experience and interview and potential and remarks:
+            sessionDB = Session()
+            data = sessionDB.query(Interview).filter(Interview.reg_id == e).update(
+                {'scores': [experience, interview, potential], 'remarks': remarks})
+            sessionDB.commit()
+            sessionDB.close()
+            if data == 1:
+                return jsonify()
+            else:
+                return jsonify(err='Update Failed.No such applicant exists')
+        else:
+            return jsonify(err='Incomplete form submitted')
+
+
+@app.route("/team/completed/release/all",methods=['GET'])
+def releaseAll():
+    if 'email' in session:
+        sessionDB = Session()
+        sessionDB.query(Registration).filter(Registration.reviewed==True,Registration.status==False).update({'status':True})
+        sessionDB.commit()
+        sessionDB.close()
+    return redirect(url_for('completed'))
 
 
 if __name__ == '__main__':

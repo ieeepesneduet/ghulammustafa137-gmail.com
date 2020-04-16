@@ -20,7 +20,7 @@
                 .then(data => {
                     if(data.err) throw new Error(data.err);
                     let htmlData = '';
-                    const dataValues = {a:'Full Name',b:'Year',c:'Email',d:'Phone Number',e:'CNIC',f:'Domain',g:'Discipline',h:'About',i:'Association with volunteering work',j:'Why do you want to join IEEE PES NED',k:'Achievements',l:'Application reviewed'};
+                    const dataValues = {a:'Full Name',b:'Year',c:'Email',d:'Phone Number',e:'CNIC',f:'Domain',g:'Discipline',h:'About',i:'Association with volunteering work',j:'Why do you want to join IEEE PES NED',k:'Achievements',l:'Application reviewed',m:'Experience rating',n:'Interview rating',o:'Potential rating',p:'Remarks'};
                     for(const prop in data){
                         htmlData += `<tr><td>${dataValues[prop]}</td><td>${data[prop]}</td></tr>`
                     }

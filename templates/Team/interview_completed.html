@@ -1,7 +1,11 @@
 {% extends 'Team/layout.html' %}
 
 {% block content %}
-
+<div id="confirmBox">
+    <div class="message">Are you sure you want to release all records?</div>
+    <a class="confirmBtn" href="{{ url_for('releaseAll') }}">Yes</a>
+    <button class="confirmBtn" id="noBtn">No</button>
+</div>
 
     <!--BANNER IMAGE-->
     <img src="{{ url_for('static',filename='images/ban.png') }}" class="img-fluid" alt="Responsive image">
@@ -10,10 +14,11 @@
         <div class="row" id="row">
             <div class="col-lg-4 col-sm-4"><a href="{{ url_for('home') }}" id="row1">Home ></a>
                 <a href="{{ url_for('completed') }}" id="row3"> Interviews completed </a></div>
-            <div class="col-lg-8 col-sm-8" id="row2">Total Number of Candidates: {{ numCandidates }}</div>
+            <div class="col-lg-6 col-sm-6" id="row2">Total Number of Candidates: {{ numCandidates }}</div>
+                <button id="release" class="btn btn-outline-danger col-lg-2 col-sm-2">Release All Records</button>
+
         </div>
     </div>
-
     <!--TABLE-->
     <div id="msg-box"></div>
 
@@ -47,7 +52,7 @@
                                 <td>{{ candidate.year }}</td>
                                 <td>{{ candidate.discipline }}</td>
                                 <td>
-                                    <a href="#" class="btn1 btn-primary btn-sm"
+                                    <a href="{{ url_for('candidateDetails',e=candidate.email) }}" class="btn1 btn-primary btn-sm"
                                    style="text-decoration: none;">View<span
                                     class="underscroll">_</span>Details</a>
                                 </td>
