@@ -5,7 +5,6 @@
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.ico') }}"/>
     <link href="https://fonts.googleapis.com/css?family=Poppins&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
-    <script src="{{ url_for('static',filename='js/url.js') }}"></script>
 
     {% if page %}
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/'+page+'.css') }}">
@@ -16,6 +15,7 @@
           href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}">
 	<script src="{{ url_for('static', filename='vendor/bootstrap/js/popper.js') }}"></script>
     <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/fetch.js') }}"></script>
     <script src="{{ url_for('static',filename='js/helper.js') }}"></script>
 
 </head>
@@ -54,18 +54,12 @@
                     <a class="nav-link" href="{{ url_for('completed') }}" style="color:black;">Interviews Completed</a>
                 </li>
                 <li class="nav-item" id="nav-item">
+                    <a class="nav-link" href="{{ url_for('search_get') }}" style="color:black;">Search</a>
+                </li>
+                <li class="nav-item" id="nav-item">
                     <a class="nav-link" href="{{ url_for('logout') }}" style="color:black;">Logout</a>
                 </li>
             </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <select class="form-control mr-2">
-                    <option>Name</option>
-                    <option>Email</option>
-                    <option>Number</option>
-                </select>
-                <input class="form-control mr-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0 ml-2" type="submit">Search</button>
-            </form>
         </div>
     </nav>
 </div>

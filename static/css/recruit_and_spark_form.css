@@ -570,21 +570,19 @@ textarea.input100 {
   width: 75%;
 }
 
-#options
+.options
 {
   border: none;
   text-align:center;
   padding-top: 10px;
   padding-bottom: 10px;
   color: #25854e;
-  background-color: none;
 
 }
 
 .change_select_position
 {
   text-align: center;
-  background-color: none;
 }
 
 .user_data_shown{

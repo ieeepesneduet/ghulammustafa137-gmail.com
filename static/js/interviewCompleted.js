@@ -3,19 +3,8 @@
     const loadMoreBtn = document.getElementById('loadMoreBtn');
     loadMoreBtn.onclick = function(){
         const next = document.getElementById('numRecords').value || 10;
-        fetch(fetchUrl+`/team/completed`,{
-            method:'post',
-            headers: {
-                    'Content-Type': 'application/json'
-            },
-            body:JSON.stringify({offset,next})
-        })
-            .then(response => {
-                if(!response.ok) throw new Error('Server encountered an error');
-                return response.json();
-            })
-            .then(data => {
-                if(data.err) throw new Error(data.err);
+        if(next>0){
+            fetchData(`/team/completed`,function(data){
                 let html = '';
                 for(let i=0;i<data.length;i++){
                     html += `<tr>                                                                  
@@ -36,8 +25,10 @@
                     loadMoreBtn.disabled = true;
                 document.getElementById('tableBody').insertAdjacentHTML('beforeend',html);
                 offset += data.length;
-            })
-            .catch(err => showMsg(err.message,'danger'))
+            },new PostJsonData({offset,next}))
+        }else{
+            showMsg('Number of records that you want to load should be more than zero','danger')
+        }
     }
     const inputRecords = document.getElementById('numRecords');
     inputRecords.onkeypress = function(e){

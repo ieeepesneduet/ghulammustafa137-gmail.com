@@ -3,7 +3,7 @@
 {% block content %}
 <div id="confirmBox">
     <div class="message">Are you sure you want to release all records?</div>
-    <a class="confirmBtn" href="{{ url_for('releaseAll') }}">Yes</a>
+    <a class="confirmBtn" href="{{ url_for('release_all') }}">Yes</a>
     <button class="confirmBtn" id="noBtn">No</button>
 </div>
 
@@ -27,7 +27,7 @@
             <div class="col-sm-12">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Candidates List<div style="float:right;"><input style="margin-right:9px;display: inline-block;width: 25%;" type="number" id="numRecords" class="form-control" placeholder="10"><span>of {{ numCandidates }}</span></div></h4>
+                        <h4 class="card-title">Candidates List<div style="float:right;"><input style="margin-right:9px;display: inline-block;width: 25%;" type="number" id="numRecords" class="form-control" placeholder="10"><span style="font-size: 20px">of {{ numCandidates }}</span></div></h4>
                     </div>
                     <!---table heading-->
                     <table class="table table-responsive-lg table-borderless table-striped table-hover">
@@ -52,7 +52,7 @@
                                 <td>{{ candidate.year }}</td>
                                 <td>{{ candidate.discipline }}</td>
                                 <td>
-                                    <a href="{{ url_for('candidateDetails',e=candidate.email) }}" class="btn1 btn-primary btn-sm"
+                                    <a href="{{ url_for('candidate_details',e=candidate.email) }}" class="btn1 btn-primary btn-sm"
                                    style="text-decoration: none;">View<span
                                     class="underscroll">_</span>Details</a>
                                 </td>

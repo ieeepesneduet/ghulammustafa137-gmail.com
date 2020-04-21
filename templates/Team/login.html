@@ -4,7 +4,6 @@
 	<title>IEEE PES Recruitment</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-        <script src="{{ url_for('static',filename='js/url.js') }}"></script>
 
 <!--===============================================================================================-->	
 	<link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.ico') }}" />
@@ -55,16 +54,18 @@
             
             
     </div>
-
+    <script>
+        const form = document.getElementById('loginForm');
+        form.onsubmit = function(){
+            document.getElementById('loader').style.display='block';
+        }
+    </script>
 
 <!--===============================================================================================-->
     <script src="{{ url_for('static', filename='vendor/jquery/jquery-3.2.1.min.js') }}"></script>
 	<!--===============================================================================================-->
 	<script src="{{ url_for('static', filename='vendor/bootstrap/js/popper.js') }}"></script>
 	<script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='vendor/animsition/js/animsition.js') }}"></script>
-	<script src="{{ url_for('static', filename='js/login.js') }}"></script>
-
 
 
 
