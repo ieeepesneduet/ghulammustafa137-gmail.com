@@ -1,8 +1,7 @@
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 from sqlalchemy import create_engine, exc, func
-from sqlalchemy.orm import load_only, noload, joinedload
+from sqlalchemy.orm import load_only, noload, joinedload, sessionmaker
 from models import *
-from sqlalchemy.orm import sessionmaker
 from os import environ
 from random import randint
 from bcrypt import checkpw
@@ -39,8 +38,8 @@ class ValErr(Exception):
 
 
 def candidate_area(path, is_reg, title):
-    def request_type(func):
-        @wraps(func)
+    def request_type(function):
+        @wraps(function)
         def wrapper():
             if request.method == 'GET':
                 return render_template(path, is_reg=is_reg, title=title)
@@ -53,8 +52,8 @@ def candidate_area(path, is_reg, title):
 
 
 def team_area(is_json):
-    def email_check(func):
-        @wraps(func)
+    def email_check(function):
+        @wraps(function)
         def wrapper(*args, **kwargs):
             if 'email' in session:
                 return func(*args, **kwargs)
@@ -67,8 +66,8 @@ def team_area(is_json):
     return email_check
 
 
-def team_area2(func):
-    @wraps(func)
+def team_area2(function):
+    @wraps(function)
     def wrapper(*args, **kwargs):
         if 'email' in session:
             return func(*args, **kwargs)
@@ -452,7 +451,7 @@ def search(e):
             data = session_db.query(Registration).options(
                 load_only('name', 'email', 'discipline', 'phone_number', 'year')).filter(
                 Registration.reviewed == False, Registration.status == False, Registration.domain == domain,
-                getattr(Registration, type_search) == search_query).all()
+                func.lower(getattr(Registration, type_search)) == search_query.lower()).all()
             for appl in data:
                 data_list.append(
                     [appl.name, appl.email, appl.phone_number,
@@ -463,7 +462,7 @@ def search(e):
                 Registration.status == False,
                 Registration.domain == domain,
                 getattr(Registration,
-                        type_search).like(
+                        type_search).ilike(
                     "%" + search_query + "%")).all()
             for appl in data:
                 data_list.append(getattr(appl, type_search))
