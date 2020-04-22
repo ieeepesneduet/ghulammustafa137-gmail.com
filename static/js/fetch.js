@@ -15,7 +15,7 @@ class PostJsonData{
     }
 }
 
-const fetchUrl = 'http://127.0.0.1:5000';
+const fetchUrl = 'https://ieee-registration.herokuapp.com';
 
 async function fetchData(fetchPath,handleData,fetchParam){
     try{
