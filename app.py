@@ -44,7 +44,7 @@ def candidate_area(path, is_reg, title):
             if request.method == 'GET':
                 return render_template(path, is_reg=is_reg, title=title)
             else:
-                return func()
+                return function()
 
         return wrapper
 
@@ -56,7 +56,7 @@ def team_area(is_json):
         @wraps(function)
         def wrapper(*args, **kwargs):
             if 'email' in session:
-                return func(*args, **kwargs)
+                return function(*args, **kwargs)
             if is_json:
                 return jsonify(err='login to access this area')
             return redirect(url_for('login'))
@@ -70,7 +70,7 @@ def team_area2(function):
     @wraps(function)
     def wrapper(*args, **kwargs):
         if 'email' in session:
-            return func(*args, **kwargs)
+            return function(*args, **kwargs)
         if request.method == 'POST':
             return jsonify(err='login to access this area')
         return redirect(url_for('login'))

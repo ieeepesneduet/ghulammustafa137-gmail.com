@@ -40,7 +40,7 @@
         const val = this.value;
         if(val.length>=3){
             if(val.length === 3){
-                if(val === lastQuery){
+                if(val === lastQuery || val.toLowerCase() === lastQuery.toLowerCase()){
                     const suggestionsList = document.getElementById('searchSuggestions').innerHTML;
                     if(!suggestionsList)
                         loadSuggestions(suggestions);
