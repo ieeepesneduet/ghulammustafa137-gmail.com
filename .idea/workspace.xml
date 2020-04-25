@@ -3,21 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="54a68d8e-23f5-4885-851d-6ca702f286bb" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dbSeed.py" beforeDir="false" afterPath="$PROJECT_DIR$/dbSeed.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/css/interview_area.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/interview_area.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/candidates.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/candidates.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/fetch.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/fetch.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/helper.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/helper.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/interviewDetails.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/interviewDetails.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/search.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/search.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/startInterview.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/startInterview.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/statusForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/statusForm.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/Team/candidates.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/Team/candidates.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/Team/interviewArea.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/Team/interviewArea.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/Team/interview_details.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/Team/interview_details.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/Team/layout.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/Team/layout.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/all_candidates.csv" beforeDir="false" afterPath="$PROJECT_DIR$/all_candidates.csv" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -191,7 +177,7 @@
       <workItem from="1587678955227" duration="2740000" />
       <workItem from="1587739189314" duration="2580000" />
       <workItem from="1587756663060" duration="2831000" />
-      <workItem from="1587810196505" duration="1813000" />
+      <workItem from="1587810196505" duration="3115000" />
     </task>
     <servers />
   </component>
@@ -227,22 +213,22 @@
       <screen x="0" y="27" width="1024" height="741" />
     </state>
     <state x="295" y="155" width="424" height="491" key="FileChooserDialogImpl/0.27.1024.741@0.27.1024.741" timestamp="1585856443091" />
-    <state width="978" height="184" key="GridCell.Tab.0.bottom" timestamp="1587812009331">
+    <state width="978" height="321" key="GridCell.Tab.0.bottom" timestamp="1587812233960">
       <screen x="0" y="27" width="1024" height="741" />
     </state>
-    <state width="978" height="184" key="GridCell.Tab.0.bottom/0.27.1024.741@0.27.1024.741" timestamp="1587812009331" />
-    <state width="978" height="184" key="GridCell.Tab.0.center" timestamp="1587812009331">
+    <state width="978" height="321" key="GridCell.Tab.0.bottom/0.27.1024.741@0.27.1024.741" timestamp="1587812233960" />
+    <state width="978" height="321" key="GridCell.Tab.0.center" timestamp="1587812233959">
       <screen x="0" y="27" width="1024" height="741" />
     </state>
-    <state width="978" height="184" key="GridCell.Tab.0.center/0.27.1024.741@0.27.1024.741" timestamp="1587812009331" />
-    <state width="978" height="184" key="GridCell.Tab.0.left" timestamp="1587812009330">
+    <state width="978" height="321" key="GridCell.Tab.0.center/0.27.1024.741@0.27.1024.741" timestamp="1587812233959" />
+    <state width="978" height="321" key="GridCell.Tab.0.left" timestamp="1587812233959">
       <screen x="0" y="27" width="1024" height="741" />
     </state>
-    <state width="978" height="184" key="GridCell.Tab.0.left/0.27.1024.741@0.27.1024.741" timestamp="1587812009330" />
-    <state width="978" height="184" key="GridCell.Tab.0.right" timestamp="1587812009331">
+    <state width="978" height="321" key="GridCell.Tab.0.left/0.27.1024.741@0.27.1024.741" timestamp="1587812233959" />
+    <state width="978" height="321" key="GridCell.Tab.0.right" timestamp="1587812233960">
       <screen x="0" y="27" width="1024" height="741" />
     </state>
-    <state width="978" height="184" key="GridCell.Tab.0.right/0.27.1024.741@0.27.1024.741" timestamp="1587812009331" />
+    <state width="978" height="321" key="GridCell.Tab.0.right/0.27.1024.741@0.27.1024.741" timestamp="1587812233960" />
     <state x="1" y="31" width="1022" height="737" key="SettingsEditor" timestamp="1585219994374">
       <screen x="0" y="27" width="1024" height="741" />
     </state>
