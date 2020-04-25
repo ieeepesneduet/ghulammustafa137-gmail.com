@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, session, redirect, url_for
+from flask import Flask, render_template, request, jsonify, session, redirect, url_for, send_file
 from sqlalchemy import create_engine, exc, func
 from sqlalchemy.orm import load_only, noload, joinedload, sessionmaker
 from models import *
@@ -8,6 +8,7 @@ from bcrypt import checkpw
 from flask_sslify import SSLify
 from base64 import b64encode
 from functools import wraps
+from os import path
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 app = Flask(__name__)
@@ -118,6 +119,11 @@ def registration():
                 session_db.close()
                 return jsonify(err='email or/and cnic already registered')
             session_db.close()
+            if path.exists('all_candidates.csv'):
+                with open('all_candidates.csv','a') as file:
+                    file.write(f"\n{rand_str},{name},{email},{phone_number},{cnic},{year},{domain},{discipline},{about},{association},{why},{achievements}")
+            else:
+                print('csv file not found')
             return jsonify(id=rand_str)
         else:
             return jsonify(err='Please upload a .jpg/.png image')
@@ -132,21 +138,20 @@ def status():
         session_db = Session()
         data = session_db.query(Registration).options(noload('imagestore')).get(request.get_json()['id'])
         if data is None:
-            json = jsonify(err='Invalid ID')
+            session_db.close()
+            return jsonify(err='Invalid ID')
         else:
+            dict = {'a':data.name, 'b':data.year, 'c':data.email, 'd':data.phone_number, 'e':data.cnic,'f':data.domain,
+                               'g':data.discipline, 'h':data.about, 'i':data.association, 'j':data.why, 'k':data.achievements,
+                               'l':data.status}
             if data.status:
-                json = jsonify(a=data.name, b=data.year, c=data.email, d=data.phone_number, e=data.cnic,
-                               f=data.domain,
-                               g=data.discipline, h=data.about, i=data.association, j=data.why, k=data.achievements,
-                               l=data.status, m=data.interview.scores[0], n=data.interview.scores[1],
-                               o=data.interview.scores[2], p=data.interview.remarks)
-            else:
-                json = jsonify(a=data.name, b=data.year, c=data.email, d=data.phone_number, e=data.cnic,
-                               f=data.domain,
-                               g=data.discipline, h=data.about, i=data.association, j=data.why, k=data.achievements,
-                               l=data.status)
+                dict['m'] = data.interview.scores[0]
+                dict['n'] = data.interview.scores[1]
+                dict['o'] = data.interview.scores[2]
+                if data.interview.show_feedback:
+                    dict['p'] = data.interview.remarks
         session_db.close()
-        return json
+        return jsonify(dict)
     else:
         return jsonify(err='Error parsing data')
 
@@ -196,71 +201,68 @@ def logout():
     return redirect(url_for('login'))
 
 
-@app.route('/team/candidates/<string:year>/loadmore', methods=['POST'])
+@app.route('/team/candidates/more', methods=['POST'])
 @team_area(True)
-def load_more(year):
+def load_more():
     if not request.is_json:
-        return jsonify('Invalid request json')
+        return jsonify(err='Invalid request json')
     req_data = request.get_json()
-    if not ('offset' in req_data and 'next' in req_data):
-        return jsonify('missing data in request')
+    if not ('offset' in req_data and 'next' in req_data and 'domain' in req_data and 'year' in req_data):
+        return jsonify(err='missing data in request')
     session_db = Session()
     data_list = []
-    if year == 'All':
-        for appl in session_db.query(Registration).options(
-                load_only('name', 'email', 'phone_number', 'discipline', 'year')).filter(
-            Registration.reviewed == False, Registration.status == False).offset(req_data.get('offset')).limit(
+    for appl in session_db.query(Registration).options(
+        load_only('name', 'email', 'phone_number', 'discipline')).filter(
+            Registration.reviewed == False, Registration.status == False, Registration.domain == req_data.get('domain'), Registration.year == req_data.get('year')).offset(req_data.get('offset')).limit(
             req_data.get('next')):
-            data_list.append(
-                [appl.name, appl.email, appl.phone_number,
-                 appl.discipline, appl.year])
-    else:
-        for appl in session_db.query(Registration).options(
-                load_only('name', 'email', 'phone_number', 'discipline')).filter(Registration.year == year,
-                                                                                 Registration.reviewed == False,
-                                                                                 Registration.status == False).offset(
-            req_data.get('offset')).limit(req_data.get('next')):
-            data_list.append(
-                [appl.name, appl.email, appl.phone_number,
-                 appl.discipline])
+        data_list.append([appl.name, appl.email, appl.phone_number,appl.discipline])
     session_db.close()
     return jsonify(data_list)
 
-
-@app.route('/team/candidates/<string:year>', methods=['GET'])
+@app.route('/team/candidates/download',methods=['GET'])
 @team_area(False)
-def candidates(year):
-    if year not in ['All', 'First', 'Second', 'Third', 'Fourth']:
-        return redirect(url_for('home'))
+def download():
+        return send_file('all_candidates.csv', as_attachment=True,cache_timeout=0)
+
+
+@app.route('/team/candidates/count',methods=['POST'])
+@team_area(True)
+def count_candidates():
+    if not request.is_json:
+        return jsonify(err='Invalid request json')
+    req_data = request.get_json()
+    if not ('year' in req_data and 'domain' in req_data):
+        return jsonify(err='Incomplete data')
     session_db = Session()
-    if year == 'All':
-        data_count = session_db.query(func.count(Registration.id)).filter(Registration.reviewed == False,
-                                                                          Registration.status == False).scalar()
-        data = session_db.query(Registration).options(
-            load_only('name', 'email', 'phone_number', 'discipline', 'year')).filter(
-            Registration.reviewed == False, Registration.status == False).limit(10).all()
-    else:
-        data_count = session_db.query(func.count(Registration.id)).filter(Registration.year == year,
-                                                                          Registration.reviewed == False,
-                                                                          Registration.status == False).scalar()
-        data = session_db.query(Registration).options(
-            load_only('name', 'email', 'phone_number', 'discipline')).filter(Registration.year == year,
-                                                                             Registration.reviewed == False,
-                                                                             Registration.status == False).limit(
-            10).all()
+    data_count = session_db.query(func.count(Registration.id)).filter(Registration.reviewed == False,
+                                                                      Registration.status == False,Registration.year == req_data.get('year'),Registration.domain == req_data.get('domain')).scalar()
     session_db.close()
-    return render_template('Team/candidates.html', year=year, numCandidates=data_count, candidates=data,
-                           title=year + ' Year Candidates')
+    return jsonify(count=data_count)
 
 
-@app.route('/team/candidates/candidate/turnin', methods=['GET', 'POST'])
+@app.route('/team/candidates', methods=['GET'])
+@team_area(False)
+def candidates():
+    session_db = Session()
+    data_count = session_db.query(func.count(Registration.id)).filter(Registration.reviewed == False,
+                                                                          Registration.status == False).scalar()
+    data = session_db.query(Registration).options(
+        load_only('name', 'email', 'phone_number', 'discipline', 'year')).filter(
+        Registration.reviewed == False, Registration.status == False).limit(10).all()
+
+    session_db.close()
+    return render_template('Team/candidates.html', numCandidates=data_count, candidates=data,
+                           title='Candidates')
+
+
+@app.route('/team/candidates/candidate', methods=['GET', 'POST'])
 @team_area2
 def turnin():
     if request.method == 'GET':
         if 'appId' in session:
             session_db = Session()
             data = session_db.query(Registration).options(joinedload('imagestore'),
-                                                          load_only('name', 'email', 'phone_number', 'year', 'domain',
+                                                          load_only('id','name', 'email', 'phone_number', 'year', 'domain',
                                                                     'discipline', 'about', 'association', 'why',
                                                                     'achievements')).filter(
                 Registration.id == session['appId'], Registration.reviewed == False,
@@ -315,11 +317,13 @@ def turnout():
             interview = request.form.get('interview')
             potential = request.form.get('potential')
             remarks = request.form.get('remarks')
+            show_feedback = request.form.get('showFeedback')
             if experience and interview and potential and remarks:
                 session_db = Session()
                 data = session_db.query(Interview).filter(Interview.reg_id == session.get('appId')).update(
                     {'scores': [experience, interview, potential],
-                     'remarks': remarks})
+                     'remarks': remarks,
+                     'show_feedback':show_feedback == '1'})
                 if data == 1:
                     session_db.query(Registration).filter(Registration.id == session.get('appId'),
                                                           Registration.status == False,
@@ -407,10 +411,11 @@ def candidate_details(e):
         interview = request.form.get('interview')
         potential = request.form.get('potential')
         remarks = request.form.get('remarks')
+        show_feedback = request.form.get('showFeedback')
         if experience and interview and potential and remarks:
             session_db = Session()
             data = session_db.query(Interview).filter(Interview.reg_id == e).update(
-                {'scores': [experience, interview, potential], 'remarks': remarks})
+                {'scores': [experience, interview, potential], 'remarks': remarks, 'show_feedback': show_feedback == '1'})
             session_db.commit()
             session_db.close()
             if data == 1:
@@ -421,7 +426,7 @@ def candidate_details(e):
             return jsonify(err='Incomplete form submitted')
 
 
-@app.route("/team/completed/release/all", methods=['GET'])
+@app.route("/team/completed/release", methods=['GET'])
 @team_area(False)
 def release_all():
     session_db = Session()
@@ -432,13 +437,13 @@ def release_all():
     return redirect(url_for('completed'))
 
 
-@app.route('/team/candidates/candidate/search', methods=['GET'])
+@app.route('/team/candidates/search', methods=['GET'])
 @team_area(False)
 def search_get():
     return render_template('Team/search.html', title='Search Page')
 
 
-@app.route('/team/candidates/candidate/search/<string:e>', methods=['POST'])
+@app.route('/team/candidates/search/<string:e>', methods=['POST'])
 @team_area(True)
 def search(e):
     search_query = request.form.get('search')

@@ -6,6 +6,7 @@
         const match = /pes\/\d{2}\/([A-Za-z0-9]{5})/.exec(appID);
         if(match){
             fetchData('/candidatearea/status',function(data){
+                console.log(data);
                 let htmlData = '';
                 const dataValues = {a:'Full Name',b:'Year',c:'Email',d:'Phone Number',e:'CNIC',f:'Domain',g:'Discipline',h:'About',i:'Association with volunteering work',j:'Why do you want to join IEEE PES NED',k:'Achievements',l:'Application reviewed',m:'Experience rating',n:'Interview rating',o:'Potential rating',p:'Remarks'};
                 for(const prop in data){

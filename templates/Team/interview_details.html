@@ -22,12 +22,13 @@
                 </div>
 
                 <div class="col-lg-4 col-sm-4 lside4" id="lcolside4" style="background-color:rgb(255, 255, 255)">
-                    <p>NAME: {{ data.name }}</p>
-                    <p>YEAR: {{ data.year }}</p>
-                    <p>DEPARTMENT: {{ data.discipline }}</p>
-                    <p>APPLIED FOR {{ data.domain }}</p>
+                    <p><b>NAME</b>: {{ data.name }}</p>
+                    <p><b>YEAR</b>: {{ data.year }}</p>
+                    <p><b>DEPARTMENT</b>: {{ data.discipline }}</p>
+                    <p><b>APPLIED FOR</b> {{ data.domain }}</p>
                     <p>CONTACT NO# {{ data.phone_number }}</p>
                     <p>EMAIL: {{ data.email }}</p>
+                    <p><b>CODE</b>: pes/20/{{ data.id }}</p>
                 </div>
                 <!----------- right side 1 ----------------------------->
                 <div class="col-lg-6 col-sm-6" style="background-color:white">
@@ -131,7 +132,12 @@
                               id="exampleFormControlTextarea1" rows="10"
                               required>{{ data.interview.remarks }}</textarea>
 
-
+                    <div class="form-check mt-2">
+                        <input disabled class="form-check-input editable" name="showFeedback" type="checkbox" value="1" id="showFeedback" {{ 'checked' if data.interview.show_feedback else '' }}>
+                        <label class="form-check-label" for="showFeedback">
+                        Show Feedback
+                        </label>
+                    </div>
                     <div style="background-color:rgb(255, 255, 255);">
                         <p align="left">
                             <button id="edit" type="button" class="btn btn-primary interviewBtn">Edit</button>

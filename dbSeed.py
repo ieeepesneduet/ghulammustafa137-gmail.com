@@ -4,6 +4,10 @@ from os import environ
 from models import *
 from sqlalchemy.orm import sessionmaker
 
+f = open('all_candidates.csv', 'w+')
+f.write('id,name,email,phone number,cnic,year,domain,discipline,about,association,why,achievements')
+f.close()
+
 db = create_engine(environ['DATABASE_URL'])
 Session = sessionmaker(bind=db)
 base.metadata.create_all(db)

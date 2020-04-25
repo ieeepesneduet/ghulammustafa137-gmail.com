@@ -2,7 +2,7 @@
     const searchForm = document.getElementById('searchForm');
     searchForm.onsubmit = function(e){
         e.preventDefault();
-        fetchData('/team/candidates/candidate/search/records',function(data){
+        fetchData('/team/candidates/search/records',function(data){
             let html = '';
             for(let i=0;i<data.length;i++) {
                 html += `<tr>                                                                  
@@ -58,7 +58,7 @@
         formBody.append('search',val);
         formBody.append('type',type.value);
         formBody.append('domain',domain.value);
-        fetchData('/team/candidates/candidate/search/suggestions',function(data){
+        fetchData('/team/candidates/search/suggestions',function(data){
              suggestions = data;
              loadSuggestions(data);
         },{method:'post',body:formBody})

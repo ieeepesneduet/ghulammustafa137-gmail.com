@@ -67,5 +67,6 @@ class Interview(base):
     reg_id = Column(CHAR(5), ForeignKey('registration.id'),primary_key=True)
     scores = Column(ARRAY(CHAR(1), dimensions=1),nullable=True)
     remarks = Column(String,nullable=True)
+    show_feedback = Column(Boolean,default=False)
     registration = relationship("Registration", back_populates="interview")
 

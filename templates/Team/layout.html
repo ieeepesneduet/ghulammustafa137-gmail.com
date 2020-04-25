@@ -35,20 +35,8 @@
                 <li class="nav-item active" id="nav-item">
                     <a class="nav-link" href="{{ url_for('home') }}">Home</a>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="" id="navbarDropdownMenuLink" data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false"
-                       style="color:black;">
-                        Candidate
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown" id="dropdown">
-                        <a class="dropdown-item" href="{{ url_for('candidates',year='First') }}">First Year</a>
-                        <a class="dropdown-item" href="{{ url_for('candidates',year='Second') }}">Second Year</a>
-                        <a class="dropdown-item" href="{{ url_for('candidates',year='Third') }}">Third Year</a>
-                        <a class="dropdown-item" href="{{ url_for('candidates',year='Fourth') }}">Fourth Year</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="{{ url_for('candidates',year='All') }}">All Candidates</a>
-                    </div>
+                <li class="nav-item" id="nav-item">
+                    <a class="nav-link" href="{{ url_for('candidates') }}" style="color:black;">Candidates</a>
                 </li>
                 <li class="nav-item" id="nav-item">
                     <a class="nav-link" href="{{ url_for('completed') }}" style="color:black;">Interviews Completed</a>
