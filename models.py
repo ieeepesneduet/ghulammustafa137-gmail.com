@@ -22,6 +22,7 @@ class Registration(base):
     achievements = Column(String,nullable=True)
     status = Column(Boolean,default=False)
     reviewed = Column(Boolean,default=False)
+    selection_status = Column(CHAR(1),default='3')
     imagestore = relationship("Imagestore", uselist=False, back_populates="registration")
     interview = relationship("Interview", uselist=False, back_populates="registration")
 

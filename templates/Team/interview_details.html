@@ -26,8 +26,8 @@
                     <p><b>YEAR</b>: {{ data.year }}</p>
                     <p><b>DEPARTMENT</b>: {{ data.discipline }}</p>
                     <p><b>APPLIED FOR</b> {{ data.domain }}</p>
-                    <p>CONTACT NO# {{ data.phone_number }}</p>
-                    <p>EMAIL: {{ data.email }}</p>
+                    <p><b>CONTACT NO</b># {{ data.phone_number }}</p>
+                    <p><b>EMAIL</b>: {{ data.email }}</p>
                     <p><b>CODE</b>: pes/20/{{ data.id }}</p>
                 </div>
                 <!----------- right side 1 ----------------------------->
@@ -88,6 +88,24 @@
                 		</select>
 
                         </span>
+
+                        </label>
+                    </div>
+
+                    <div class="form-group" id="rtopside1">
+
+                        <label for="input">
+
+                            Select candidate selection status
+                            <span id="rside1" style="color:#3AA145;">  <select disabled id="selectionStatus" name="selectionStatus" required
+                                                                               class="ml-3 editable"
+                                                                               style=" width: initial;">
+			                   <option value="1">Select</option>
+			                    <option value="2">Not Select</option>
+			                    <option value="3">Not yet reviewed</option>
+                		</select>
+
+            			</span>
 
                         </label>
                     </div>
@@ -155,6 +173,7 @@
         scores[0].value = '{{ data.interview.scores[0] }}';
         scores[1].value = '{{ data.interview.scores[1] }}';
         scores[2].value = '{{ data.interview.scores[2] }}';
+        document.getElementById('selectionStatus').value = '{{ data.selection_status }}'
         const id = '{{ data.id }}';
     </script>
 
