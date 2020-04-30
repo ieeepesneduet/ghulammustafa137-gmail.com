@@ -20,10 +20,7 @@
         else{
             const next = inputRecords.value || 10;
             if(next>0){
-                if(typeof domain === 'undefined' && typeof year === 'undefined'){
-                    domain = domainSelect.value;
-                    year = yearSelect.value;
-                }else if(domainSelect.value !== domain || yearSelect.value !== year) {
+                if(domainSelect.value !== domain || yearSelect.value !== year) {
                     offset = 0;
                     domain = domainSelect.value;
                     year = yearSelect.value;

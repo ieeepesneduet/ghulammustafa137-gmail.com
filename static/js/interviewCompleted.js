@@ -13,18 +13,18 @@
     }
     const domainSelect = document.getElementById('domainSelect');
     domainSelect.onchange = function (){
-        end = false;
-        showMsg('');
+        reset();
         fetchData('/team/candidates/count',function(data){
             const numCan = document.getElementsByClassName('numCan');
             numCan[0].textContent = numCan[1].textContent = data.count;
         },new PostJsonData({domain:domainSelect.value}))
     }
     const selectionStatusSelect = document.getElementById('selectionStatus');
-    selectionStatusSelect.onchange = function(){
+    function reset(){
         end = false;
         showMsg('');
     }
+    selectionStatusSelect.onchange = reset;
     let offset,domain,selectionStatus,end;
     offset = 0;
     const loadMoreBtn = document.getElementById('loadMoreBtn');
@@ -34,25 +34,22 @@
         }else{
             const next = inputRecords.value || 10;
             if(next > 0){
-                if(typeof domain === 'undefined' && typeof selectionStatus === 'undefined'){
-                    domain = domainSelect.value;
-                    selectionStatus = selectionStatusSelect.value;
-                }else if(domainSelect.value !== domain || selectionStatusSelect.value !== selectionStatus){
-                    if(selectionStatus === '3' && selectionStatusSelect.value !== selectionStatus){
+                if(domainSelect.value !== domain || selectionStatusSelect.value !== selectionStatus){
+                    if(selectionStatus === '3' && selectionStatusSelect.value !== '3'){
                         document.getElementById('contactOrScores').textContent = 'Contact No.'
                         document.getElementById('tableHeadings').lastChild.remove()
+                    }else if(selectionStatusSelect.value === '3' && selectionStatus !== '3'){
+                        document.getElementById('contactOrScores').textContent = 'Scores';
+                        document.getElementById('tableHeadings').insertAdjacentHTML('beforeend','<th scope="col">Selection</th>')
                     }
                     offset = 0;
                     domain = domainSelect.value;
                     selectionStatus = selectionStatusSelect.value;
                 }
-                console.log(selectionStatus);
                 fetchData('/team/candidates/more',function (data){
                     let btns = '';
                     if(selectionStatus === '3'){
-                        btns = '<td><button class="ssbtn" data-ss="1">&#10004;</button><button class="ssbtn" data-ss="2">&#10008;</button></td>'
-                        document.getElementById('contactOrScores').textContent = 'Scores';
-                        document.getElementById('tableHeadings').insertAdjacentHTML('beforeend','<th scope="col">Selection</th>')
+                        btns = '<td><button class="ssbtn" data-ss="1">&#10004;</button><button class="ssbtn" data-ss="2">&#10008;</button></td>';
                     }
                     let html = '';
                     for(let i=0;i<data.length;i++){
