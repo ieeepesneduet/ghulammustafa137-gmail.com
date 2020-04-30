@@ -147,6 +147,7 @@ def status():
                 dict['m'] = data.interview.scores[0]
                 dict['n'] = data.interview.scores[1]
                 dict['o'] = data.interview.scores[2]
+                dict['q'] = 'selected' if data.selection_status == '1' else 'not selected'
                 if data.interview.show_feedback:
                     dict['p'] = data.interview.remarks
         session_db.close()
