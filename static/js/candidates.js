@@ -12,7 +12,6 @@
     const yearSelect = document.getElementById('yearSelect');
     yearSelect.onchange = handleOnChange;
     let offset,year,domain,end;
-    offset = 0;
     const loadMoreBtn = document.getElementById('loadMoreBtn');
     loadMoreBtn.onclick = function(){
         if(end)

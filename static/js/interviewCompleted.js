@@ -26,7 +26,6 @@
     }
     selectionStatusSelect.onchange = reset;
     let offset,domain,selectionStatus,end;
-    offset = 0;
     const loadMoreBtn = document.getElementById('loadMoreBtn');
     loadMoreBtn.onclick = function(){
         if(end){
