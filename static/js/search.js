@@ -12,10 +12,11 @@
                             <td>${data[i][2]}</td>                             
                             <td>${data[i][3]}</td>                                     
                             <td>${data[i][4]}</td>                               
-                            <td>                                                              
-                                <button data-email="${data[i][1]}" type="button" class="btn btn-success turninBtn">Turn In</button>
-                            </td>                                                             
-                         </tr>`
+                            <td>`+
+                    (data[i][5]?`<a href="/team/completed/${data[i][1]}" class="btn1 btn-primary btn-sm"
+                                   style="text-decoration: none;">View<span
+                                    class="underscroll">_</span>Details</a>`:`<button data-email="${data[i][1]}" type="button" class="btn btn-success turninBtn">Turn In</button>`)
+                            +'</td></tr>';
             }
             document.getElementById('tableBody').innerHTML = html;
         },new PostFormData(searchForm))

@@ -500,19 +500,16 @@ def search(e):
         data_list = []
         if e == 'records':
             query = session_db.query(Registration).options(
-                load_only('name', 'email', 'discipline', 'phone_number', 'year')).filter(
-                Registration.reviewed == False, Registration.status == False,
+                load_only('name', 'email', 'discipline', 'phone_number', 'year', 'reviewed')).filter(
                 func.lower(getattr(Registration, type_search)) == search_query.lower())
             if not domain == 'All':
                 query = query.filter(Registration.domain == domain)
             for appl in query.all():
                 data_list.append(
                     [appl.name, appl.email, appl.phone_number,
-                     appl.year, appl.discipline])
+                     appl.year, appl.discipline,appl.reviewed])
         elif e == 'suggestions':
             query = session_db.query(Registration).options(load_only(type_search)).filter(
-                Registration.reviewed == False,
-                Registration.status == False,
                 getattr(Registration,
                         type_search).ilike(
                     "%" + search_query + "%"))
