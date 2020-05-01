@@ -224,7 +224,9 @@ def load_more():
     else:
         query = session_db.query(Registration).options(load_only('name','email','phone_number','year','discipline'))
         if 'year' in req_data:
-            query = query.filter(Registration.reviewed == False,Registration.status == False,Registration.year == req_data.get('year'))
+            query = query.filter(Registration.reviewed == False,Registration.status == False)
+            if not req_data.get('year') == 'All':
+                query = query.filter(Registration.year == req_data.get('year'))
         elif req_data.get('selectionStatus') in ['1','2']:
             query = query.filter(Registration.reviewed == True,Registration.selection_status == req_data.get('selectionStatus'))
         if not req_data.get('domain') == 'All':
