@@ -9,6 +9,7 @@ from flask_sslify import SSLify
 from base64 import b64encode
 from functools import wraps
 from os import path
+import requests
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 app = Flask(__name__)
@@ -123,6 +124,7 @@ def registration():
                     file.write(
                         f"\n{appl.id},{appl.name},{appl.email},{appl.phone_number},{appl.cnic},{appl.year},{appl.domain},{appl.discipline},{appl.about},{appl.association},{appl.why},{appl.achievements}")
             session_db.close()
+            requests.get(f'https://script.google.com/macros/s/{environ.get("GOOGLE_SHEETS_KEY")}/exec',params={'name':name,'email':email,'year':year,'discipline':discipline,'domain':domain,'phoneNumber':phone_number,'code':'pes/20/'+rand_str,'cnic':cnic})
             return jsonify(id=rand_str)
         else:
             return jsonify(err='Please upload a .jpg/.png image')
