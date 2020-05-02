@@ -1,5 +1,6 @@
 (function handleForm(){
     const registrationForm = document.getElementById('registration-form');
+    const code= document.getElementById('code');
     registrationForm.onsubmit = function(e){
         e.preventDefault();
         window.scrollTo(0,0);
