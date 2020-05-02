@@ -724,3 +724,8 @@ table td
   padding: 0px 0px 0px 0px;
   max-width: 20%;
 }
+
+.code_main
+{
+	visibility:none;
+}
