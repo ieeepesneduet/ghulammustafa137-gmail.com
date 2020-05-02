@@ -1,11 +1,11 @@
 (function handleForm(){
     const registrationForm = document.getElementById('registration-form');
-    const code= document.getElementById('code');
+    var code= document.getElementById('code');
     registrationForm.onsubmit = function(e){
         e.preventDefault();
         window.scrollTo(0,0);
         fetchData('/candidatearea/registration',function(data){
-            
+            code.innerHTML = ${data.id};
             var $form = $('form#registration-form'),
             url = 'https://script.google.com/macros/s/AKfycbyvJRlJ7IRg0ayR8yZzo2XSwcvzGDKnjei1PGLcSxLKxFtvnB6K/exec'
             
