@@ -60,7 +60,8 @@
     <div class="container-fluid">
         <div style="margin-left: 0; margin-right: 0;" class="titletable row candidate">
             <div class="col-lg-7 col-sm-7">Candidates List <a href="{{ url_for('download_all') }}"
-                                                              class="ml-2 btn btn-outline-dark">Export as csv</a></div>
+                                                              class="ml-2 btn btn-outline-dark">Export as csv</a><a href="{{ url_for('download_images_all') }}"
+                                                              class="ml-2 btn btn-outline-dark">Export Images</a></div>
             <div class="col-lg-5 col-sm-5 form-inline">
                 <select id="yearSelect" class="form-control mr-2">
                     <option value="All">All</option>

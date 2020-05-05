@@ -2,14 +2,16 @@ from flask import Flask, render_template, request, jsonify, session, redirect, u
 from sqlalchemy import create_engine, exc, func
 from sqlalchemy.orm import load_only, noload, joinedload, sessionmaker
 from models import *
-from os import environ
+from os import environ, mkdir
 from random import randint
 from bcrypt import checkpw
 from flask_sslify import SSLify
 from base64 import b64encode
 from functools import wraps
-from os import path
+from os import path, remove
 import requests
+import shutil
+
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 app = Flask(__name__)
@@ -110,7 +112,7 @@ def registration():
 
             appl = Registration(rand_str, name, email, phone_number, cnic, year, domain, discipline,
                                 about, association, why, achievements)
-            image_instance = Imagestore(image.read())
+            image_instance = Imagestore(image.read(),file_type_image)
             appl.imagestore = image_instance
             session_db.add(appl)
             try:
@@ -119,7 +121,10 @@ def registration():
                 session_db.rollback()
                 session_db.close()
                 return jsonify(err='email or/and cnic already registered')
-            if path.exists('all_candidates.csv'):
+            if path.isdir('images_all'):
+                with open(f'images_all/{image_instance.reg_id}.{image_instance.extension}', 'wb') as file:
+                    file.write(image_instance.data)
+            if path.isfile('all_candidates.csv'):
                 with open('all_candidates.csv','a') as file:
                     file.write(
                         f"\n{appl.id},{appl.name},{appl.email},{appl.phone_number},{appl.cnic},{appl.year},{appl.domain},{appl.discipline},{appl.about},{appl.association},{appl.why},{appl.achievements}")
@@ -247,14 +252,35 @@ def download_all():
         with open('all_candidates.csv','x') as file:
             file.write('id,name,email,phone number,cnic,year,domain,discipline,about,association,why,achievements')
             session_db = Session()
-            for appl in session_db.query(Registration).all():
-                file.write(
-                    f"\n{appl.id},{appl.name},{appl.email},{appl.phone_number},{appl.cnic},{appl.year},{appl.domain},{appl.discipline},{appl.about},{appl.association},{appl.why},{appl.achievements}")
+            query = "COPY registration (id,name,email,phone_number,cnic,year,domain,discipline,about,association,why,achievements) to 'all_candidates.csv' delimiter ','"
+            session_db.execute(query)
+            # for appl in session_db.query(Registration).all():
+                # file.write(
+                    # f"\n{appl.id},{appl.name},{appl.email},{appl.phone_number},{appl.cnic},{appl.year},{appl.domain},{appl.discipline},{appl.about},{appl.association},{appl.why},{appl.achievements}")
+            session_db.commit()
             session_db.close()
     except FileExistsError:
         pass
     finally:
         return send_file('all_candidates.csv', as_attachment=True,cache_timeout=0)
+
+
+@app.route('/team/candidates/image/download',methods=['GET'])
+@team_area(False)
+def download_images_all():
+    try:
+        mkdir('images_all')
+        session_db = Session()
+        data = session_db.query(Imagestore).all()
+        for img_d in data:
+            with open(f'images_all/{img_d.reg_id}.{img_d.extension}','wb') as file:
+                file.write(img_d.data)
+    except FileExistsError:
+        remove('images.zip')
+    finally:
+        shutil.make_archive('images', 'zip', 'images_all')
+        return send_file('images.zip',as_attachment=True,cache_timeout=0)
+
 
 
 @app.route('/team/candidates/count',methods=['POST'])
@@ -525,6 +551,12 @@ def search(e):
         return jsonify(data_list)
     else:
         return jsonify(err='Incomplete form submitted')
+
+# @app.route('/delete',methods=['GET'])
+# def delete():
+
+
+
 
 
 if __name__ == '__main__':

@@ -4,6 +4,10 @@
     <list default="true" id="54a68d8e-23f5-4885-851d-6ca702f286bb" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dbSeed.py" beforeDir="false" afterPath="$PROJECT_DIR$/dbSeed.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/fetch.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/fetch.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/Team/candidates.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/Team/candidates.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -197,7 +201,12 @@
       <workItem from="1588346351645" duration="681000" />
       <workItem from="1588413004374" duration="5504000" />
       <workItem from="1588443894101" duration="1457000" />
-      <workItem from="1588447399518" duration="2080000" />
+      <workItem from="1588447399518" duration="3025000" />
+      <workItem from="1588507582499" duration="2124000" />
+      <workItem from="1588627753856" duration="5655000" />
+      <workItem from="1588691238377" duration="2820000" />
+      <workItem from="1588702521085" duration="1071000" />
+      <workItem from="1588706188451" duration="2447000" />
     </task>
     <servers />
   </component>
@@ -209,10 +218,10 @@
       <screen x="0" y="27" width="1024" height="741" />
     </state>
     <state x="0" y="55" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.27.1024.741@0.27.1024.741" timestamp="1588448548359" />
-    <state x="215" y="202" width="583" height="404" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1585350325188">
+    <state x="215" y="202" width="603" height="439" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1588631833375">
       <screen x="0" y="27" width="1024" height="741" />
     </state>
-    <state x="215" y="202" width="583" height="404" key="#com.intellij.fileTypes.FileTypeChooser/0.27.1024.741@0.27.1024.741" timestamp="1585350325188" />
+    <state x="215" y="202" width="603" height="439" key="#com.intellij.fileTypes.FileTypeChooser/0.27.1024.741@0.27.1024.741" timestamp="1588631833375" />
     <state x="244" y="183" width="525" height="435" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1585856208905">
       <screen x="0" y="27" width="1024" height="741" />
     </state>
@@ -233,22 +242,22 @@
       <screen x="0" y="27" width="1024" height="741" />
     </state>
     <state x="295" y="155" width="424" height="491" key="FileChooserDialogImpl/0.27.1024.741@0.27.1024.741" timestamp="1585856443091" />
-    <state width="978" height="296" key="GridCell.Tab.0.bottom" timestamp="1588424411999">
+    <state width="978" height="182" key="GridCell.Tab.0.bottom" timestamp="1588707842899">
       <screen x="0" y="27" width="1024" height="741" />
     </state>
-    <state width="978" height="296" key="GridCell.Tab.0.bottom/0.27.1024.741@0.27.1024.741" timestamp="1588424411999" />
-    <state width="978" height="296" key="GridCell.Tab.0.center" timestamp="1588424411999">
+    <state width="978" height="182" key="GridCell.Tab.0.bottom/0.27.1024.741@0.27.1024.741" timestamp="1588707842899" />
+    <state width="978" height="182" key="GridCell.Tab.0.center" timestamp="1588707842899">
       <screen x="0" y="27" width="1024" height="741" />
     </state>
-    <state width="978" height="296" key="GridCell.Tab.0.center/0.27.1024.741@0.27.1024.741" timestamp="1588424411999" />
-    <state width="978" height="296" key="GridCell.Tab.0.left" timestamp="1588424411999">
+    <state width="978" height="182" key="GridCell.Tab.0.center/0.27.1024.741@0.27.1024.741" timestamp="1588707842899" />
+    <state width="978" height="182" key="GridCell.Tab.0.left" timestamp="1588707842898">
       <screen x="0" y="27" width="1024" height="741" />
     </state>
-    <state width="978" height="296" key="GridCell.Tab.0.left/0.27.1024.741@0.27.1024.741" timestamp="1588424411999" />
-    <state width="978" height="296" key="GridCell.Tab.0.right" timestamp="1588424411999">
+    <state width="978" height="182" key="GridCell.Tab.0.left/0.27.1024.741@0.27.1024.741" timestamp="1588707842898" />
+    <state width="978" height="182" key="GridCell.Tab.0.right" timestamp="1588707842899">
       <screen x="0" y="27" width="1024" height="741" />
     </state>
-    <state width="978" height="296" key="GridCell.Tab.0.right/0.27.1024.741@0.27.1024.741" timestamp="1588424411999" />
+    <state width="978" height="182" key="GridCell.Tab.0.right/0.27.1024.741@0.27.1024.741" timestamp="1588707842899" />
     <state x="1" y="31" width="1022" height="737" key="SettingsEditor" timestamp="1585219994374">
       <screen x="0" y="27" width="1024" height="741" />
     </state>
@@ -267,8 +276,8 @@
     <state x="175" y="89" width="672" height="678" key="search.everywhere.popup/0.27.1024.741@0.27.1024.741" timestamp="1587332496961" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/IEEE$dbSeed.coverage" NAME="dbSeed Coverage Results" MODIFIED="1587679539124" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/IEEE$dbSeed.coverage" NAME="dbSeed Coverage Results" MODIFIED="1588630718993" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/IEEE$models.coverage" NAME="models Coverage Results" MODIFIED="1585661137257" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/IEEE$IEEE.coverage" NAME="IEEE Coverage Results" MODIFIED="1588421059711" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/IEEE$IEEE.coverage" NAME="IEEE Coverage Results" MODIFIED="1588707784130" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

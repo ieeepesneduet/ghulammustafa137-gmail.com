@@ -1,4 +1,5 @@
-from sqlalchemy import Column,Boolean,LargeBinary,ForeignKey,Binary,CHAR,String
+from sqlalchemy import Column,Boolean,LargeBinary,ForeignKey,Binary,CHAR,String,DateTime,Integer
+from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.ext.declarative import declarative_base
@@ -47,9 +48,11 @@ class Imagestore(base):
 
     reg_id = Column(CHAR(5), ForeignKey('registration.id'),primary_key=True)
     data = Column(LargeBinary, nullable=False)
+    extension = Column(CHAR(4),nullable=False)
     registration = relationship("Registration", back_populates="imagestore")
 
-    def __init__(self, data):
+    def __init__(self, data, extension):
+        self.extension = extension
         self.data = data
 
 class Admin(base):
@@ -57,6 +60,7 @@ class Admin(base):
 
     email = Column(String(50),primary_key=True)
     password = Column(Binary(60),nullable=False)
+    head = Column(Boolean,nullable=False)
 
     def __init__(self,email,password):
         self.email=email
@@ -70,4 +74,30 @@ class Interview(base):
     remarks = Column(String,nullable=True)
     show_feedback = Column(Boolean,default=False)
     registration = relationship("Registration", back_populates="interview")
+
+class Prev_Registrations(base):
+    __tablename__='prev_registrations'
+
+    id = Column(CHAR(5),primary_key=True)
+    name = Column(String(32),nullable=False)
+    email = Column(String(50),nullable=False,unique=True)
+    phone_number = Column(CHAR(11),nullable=False)
+    cnic = Column(CHAR(13),nullable=False,unique=True)
+    year = Column(String(6),nullable=False)
+    domain = Column(String(25),nullable=False)
+    discipline = Column(String(30),nullable=False)
+    about = Column(String,nullable=False)
+    association = Column(String,nullable=False)
+    why = Column(String,nullable=False)
+    achievements = Column(String,nullable=True)
+    selection_status = Column(CHAR(1),default='3')
+    scores = Column(ARRAY(CHAR(1), dimensions=1),nullable=True)
+    remarks = Column(String,nullable=True)
+
+
+
+
+
+
+
 
