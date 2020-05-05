@@ -62,7 +62,8 @@ class Admin(base):
     password = Column(Binary(60),nullable=False)
     head = Column(Boolean,nullable=False)
 
-    def __init__(self,email,password):
+    def __init__(self,email,password,head):
+        self.head=head
         self.email=email
         self.password=password
 
