@@ -1,17 +1,19 @@
-from flask import Flask, render_template, request, jsonify, session, redirect, url_for, send_file
-from sqlalchemy import create_engine, exc, func
-from sqlalchemy.orm import load_only, noload, joinedload, sessionmaker
-from models import *
-from os import environ, mkdir
-from random import randint
-from bcrypt import checkpw
-from flask_sslify import SSLify
+import shutil
 from base64 import b64encode
 from functools import wraps
-from os import path, remove
-import requests
-import shutil
+from os import environ
+from os import path
+from random import randint
 
+import requests
+from bcrypt import checkpw
+from flask import Flask, render_template, request, jsonify, session, redirect, url_for, send_file, Response
+from flask_sslify import SSLify
+from sqlalchemy import create_engine, exc
+from sqlalchemy.sql.expression import func
+from sqlalchemy.orm import load_only, defer, joinedload, sessionmaker
+
+from models import *
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 app = Flask(__name__)
@@ -111,7 +113,7 @@ def registration():
                     break
 
             appl = Registration(rand_str, name, email, phone_number, cnic, year, domain, discipline,
-                                about, association, why, achievements)
+                                about, association, why, achievements= None if achievements.lower()=='nil' else achievements)
             image_instance = Imagestore(image.read(),file_type_image)
             appl.imagestore = image_instance
             session_db.add(appl)
@@ -121,13 +123,6 @@ def registration():
                 session_db.rollback()
                 session_db.close()
                 return jsonify(err='email or/and cnic already registered')
-            if path.isdir('images_all'):
-                with open(f'images_all/{image_instance.reg_id}.{image_instance.extension}', 'wb') as file:
-                    file.write(image_instance.data)
-            if path.isfile('all_candidates.csv'):
-                with open('all_candidates.csv','a') as file:
-                    file.write(
-                        f"\n{appl.id},{appl.name},{appl.email},{appl.phone_number},{appl.cnic},{appl.year},{appl.domain},{appl.discipline},{appl.about},{appl.association},{appl.why},{appl.achievements}")
             session_db.close()
             requests.get(f'https://script.google.com/macros/s/{environ.get("GOOGLE_SHEETS_KEY")}/exec',params={'name':name,'email':email,'year':year,'discipline':discipline,'domain':domain,'phoneNumber':phone_number,'code':'pes/20/'+rand_str,'cnic':cnic})
             return jsonify(id=rand_str)
@@ -142,21 +137,19 @@ def registration():
 def status():
     if request.is_json:
         session_db = Session()
-        data = session_db.query(Registration).options(noload('imagestore')).get(request.get_json()['id'])
+        data = session_db.query(Registration).options(load_only('name','email','year','domain','status','selection_status')).get(request.get_json()['id'])
         if data is None:
             session_db.close()
             return jsonify(err='Invalid ID')
         else:
-            dict = {'a':data.name, 'b':data.year, 'c':data.email, 'd':data.phone_number, 'e':data.cnic,'f':data.domain,
-                               'g':data.discipline, 'h':data.about, 'i':data.association, 'j':data.why, 'k':data.achievements,
-                               'l':data.status}
+            dict = {'a':data.name, 'b':data.year, 'c':data.email,'d':data.domain,'j':data.status}
             if data.status:
-                dict['m'] = data.interview.scores[0]
-                dict['n'] = data.interview.scores[1]
-                dict['o'] = data.interview.scores[2]
-                dict['q'] = 'selected' if data.selection_status == '1' else 'not selected'
+                dict['e'] = data.interview.scores[0]
+                dict['f'] = data.interview.scores[1]
+                dict['g'] = data.interview.scores[2]
+                dict['h'] = 'selected' if data.selection_status == '1' else 'not selected'
                 if data.interview.show_feedback:
-                    dict['p'] = data.interview.remarks
+                    dict['i'] = data.interview.remarks
         session_db.close()
         return jsonify(dict)
     else:
@@ -182,6 +175,7 @@ def login():
                     raise ValErr('Wrong password entered')
                 session_db.close()
                 session['email'] = email
+                session['head'] = data.head
                 return redirect(url_for('home'))
             except ValErr as err:
                 session_db.close()
@@ -199,7 +193,7 @@ def home():
     year_dict = {}
     for year in data:
         year_dict[year[0]] = year[1]
-    return render_template('Team/home.html', title='Home', page='home', data=year_dict)
+    return render_template('Team/home.html', title='Home', page='home', data=year_dict ,is_head=session.get('head'))
 
 
 @app.route('/team/logout')
@@ -248,39 +242,28 @@ def load_more():
 @app.route('/team/candidates/download',methods=['GET'])
 @team_area(False)
 def download_all():
-    try:
-        with open('all_candidates.csv','x') as file:
-            file.write('id,name,email,phone number,cnic,year,domain,discipline,about,association,why,achievements')
-            session_db = Session()
-            query = "COPY registration (id,name,email,phone_number,cnic,year,domain,discipline,about,association,why,achievements) to 'all_candidates.csv' delimiter ','"
-            session_db.execute(query)
-            # for appl in session_db.query(Registration).all():
-                # file.write(
-                    # f"\n{appl.id},{appl.name},{appl.email},{appl.phone_number},{appl.cnic},{appl.year},{appl.domain},{appl.discipline},{appl.about},{appl.association},{appl.why},{appl.achievements}")
-            session_db.commit()
-            session_db.close()
-    except FileExistsError:
-        pass
-    finally:
-        return send_file('all_candidates.csv', as_attachment=True,cache_timeout=0)
+    session_db = Session()
+    data = session_db.query(Registration).all()
+    session_db.close()
+    def generate():
+        yield 'id,name,email,phone_number,cnic,year,domain,discipline,about,association,why,achievements'
+        for appl in data:
+            yield f"\n{appl.id},{appl.name},{appl.email},{appl.phone_number},{appl.cnic},{appl.year},{appl.domain},{appl.discipline},{appl.about},{appl.association},{appl.why},{appl.achievements}"
+    return Response(generate(), mimetype='text/csv')
 
 
 @app.route('/team/candidates/image/download',methods=['GET'])
 @team_area(False)
 def download_images_all():
-    try:
-        mkdir('images_all')
-        session_db = Session()
-        data = session_db.query(Imagestore).all()
-        for img_d in data:
+    session_db = Session()
+    data = session_db.query(Imagestore).all()
+    session_db.close()
+    for img_d in data:
+        if not path.isfile(f"images_all/{img_d.reg_id}.{img_d.extension}"):
             with open(f'images_all/{img_d.reg_id}.{img_d.extension}','wb') as file:
                 file.write(img_d.data)
-    except FileExistsError:
-        remove('images.zip')
-    finally:
-        shutil.make_archive('images', 'zip', 'images_all')
-        return send_file('images.zip',as_attachment=True,cache_timeout=0)
-
+    shutil.make_archive('images', 'zip', 'images_all')
+    return send_file('images.zip',as_attachment=True,cache_timeout=0)
 
 
 @app.route('/team/candidates/count',methods=['POST'])
@@ -306,7 +289,7 @@ def count_candidates():
 @app.route('/team/candidates', methods=['GET'])
 @team_area(False)
 def candidates():
-    return render_template('Team/candidates.html',title='Candidates')
+    return render_template('Team/candidates.html',title='Candidates',is_head=session.get('head'))
 
 
 @app.route('/team/candidates/candidate', methods=['GET', 'POST'])
@@ -315,17 +298,17 @@ def turnin():
     if request.method == 'GET':
         if 'appId' in session:
             session_db = Session()
-            data = session_db.query(Registration).options(joinedload('imagestore'),
-                                                          load_only('id','name', 'email', 'phone_number', 'year', 'domain',
-                                                                    'discipline', 'about', 'association', 'why',
-                                                                    'achievements')).filter(
-                Registration.id == session['appId'], Registration.reviewed == False,
+            data = session_db.query(Registration).options(joinedload('imagestore').load_only('data'),
+                                                          defer('status'),defer('reviewed'),defer('selection_status')).filter(
+                Registration.id == session.get('appId'), Registration.reviewed == False,
                 Registration.status == False).scalar()
-            image = b64encode(data.imagestore.data).decode("utf-8")
-
             session_db.close()
+            if data is None:
+                session.pop('appId',None)
+                return redirect(url_for('home'))
+            image = b64encode(data.imagestore.data).decode("utf-8")
             return render_template('Team/interviewArea.html', data=data, page='interview_area', title='Interview Area',
-                                   image=image)
+                                   image=image,is_head=session.get('head'))
         else:
             return redirect(url_for('home'))
     else:
@@ -359,12 +342,18 @@ def turnout():
     if request.method == 'GET':
         if 'appId' in session:
             session_db = Session()
-            data = session_db.query(Interview).filter(Interview.reg_id == session.get('appId')).scalar()
-            session_db.delete(data)
-            session_db.commit()
+            data = session_db.query(Interview).filter(Interview.reg_id == session.get('appId')).delete()
+            if data == 1:
+                session_db.commit()
+                json_data = jsonify()
+            else:
+                session_db.rollback()
+                json_data = jsonify(err='No such candidate found')
             session_db.close()
             session.pop('appId', None)
-        return jsonify()
+        else:
+            json_data = jsonify(err='First turn in to turn out')
+        return json_data
     else:
         if 'appId' in session:
             experience = request.form.get('experience')
@@ -399,7 +388,7 @@ def turnout():
 @app.route('/team/completed', methods=['GET'])
 @team_area(False)
 def completed():
-    return render_template('Team/interview_completed.html',title='Completed Interviews', year=True)
+    return render_template('Team/interview_completed.html',title='Completed Interviews', year=True,is_head=session.get('head'))
 
 
 @app.route('/team/completed/selection',methods=['POST'])
@@ -415,12 +404,6 @@ def selection():
     if data == 1:
         session_db.commit()
         json = jsonify()
-        if path.exists('reviewed_candidates.csv'):
-            appl = session_db.query(Registration).join(Registration.interview).filter(Registration.email == req_data.get('email'),Registration.reviewed == True).scalar()
-            selection = {'1':'selected','2':'not selected','3':'not yet reviewed'}
-            with open('reviewed_candidates.csv', 'a') as file:
-                file.write(
-                    f"\n{appl.id},{appl.name},{appl.email},{appl.phone_number},{appl.cnic},{appl.year},{appl.domain},{appl.discipline},{appl.about},{appl.association},{appl.why},{appl.achievements},{selection.get(appl.selection_status)},{appl.interview.scores[0]},{appl.interview.scores[1]},{appl.interview.scores[2]},{appl.interview.remarks}")
     else:
         session_db.rollback()
         json = jsonify(err='This record has already been dealt with by other user')
@@ -430,19 +413,16 @@ def selection():
 @app.route('/team/completed/download')
 @team_area(False)
 def download_reviewed():
-    try:
-        with open('reviewed_candidates.csv','x') as file:
-            file.write('id,name,email,phone number,cnic,year,domain,discipline,about,association,why,achievements,selection status,experience,interview,potential,remarks')
-            selection = {'1': 'selected', '2': 'not selected', '3': 'not yet reviewed'}
-            session_db = Session()
-            for appl in session_db.query(Registration).join(Registration.interview).filter(Registration.reviewed == True,Registration.selection_status != '3').all():
-                file.write(
-                    f"\n{appl.id},{appl.name},{appl.email},{appl.phone_number},{appl.cnic},{appl.year},{appl.domain},{appl.discipline},{appl.about},{appl.association},{appl.why},{appl.achievements},{selection.get(appl.selection_status)},{appl.interview.scores[0]},{appl.interview.scores[1]},{appl.interview.scores[2]},{appl.interview.remarks}")
-            session_db.close()
-    except FileExistsError:
-        pass
-    finally:
-        return send_file('reviewed_candidates.csv', as_attachment=True,cache_timeout=0)
+    session_db = Session()
+    data = session_db.query(Registration).options(joinedload(Registration.interview)).filter(Registration.reviewed == True,Registration.selection_status != '3').all()
+    session_db.close()
+    def generate():
+        selection={'1':'selected','2':'not selected','3':'not yet reviewed'}
+        yield 'id,name,email,phone_number,cnic,year,domain,discipline,about,association,why,achievements,selection_status,experience,interview,potential,remarks'
+        for appl in data:
+            yield f"\n{appl.id},{appl.name},{appl.email},{appl.phone_number},{appl.cnic},{appl.year},{appl.domain},{appl.discipline},{appl.about},{appl.association},{appl.why},{appl.achievements},{selection.get(appl.selection_status)},{appl.interview.scores[0]},{appl.interview.scores[1]},{appl.interview.scores[2]},{appl.interview.remarks}"
+    return Response(generate(), mimetype='text/csv')
+
 
 @app.route("/team/candidate/stuck", methods=['POST'])
 @team_area(True)
@@ -450,17 +430,17 @@ def stuck():
     email = request.form.get('email')
     if email:
         session_db = Session()
-        data = session_db.query(Registration).join(Registration.interview).filter(Registration.email == email,
+        data = session_db.query(Interview).join(Registration).filter(Registration.email == email,
                                                                                   Registration.reviewed == False,
-                                                                                  Registration.status == False).scalar()
-        if data is None:
+                                                                                  Registration.status == False).delete()
+        if data == 1:
+            session_db.commit()
+            json = jsonify()
+        else:
             session_db.rollback()
-            session_db.close()
-            return jsonify(err='No such applicant exists')
-        session_db.delete(data.interview)
-        session_db.commit()
+            json = jsonify(err='No such applicant exists')
         session_db.close()
-        return jsonify()
+        return json
     return jsonify(err='no email submitted')
 
 
@@ -477,7 +457,7 @@ def candidate_details(e):
             return redirect(url_for('completed'))
         image = b64encode(data.imagestore.data).decode("utf-8")
         return render_template('Team/interview_details.html', data=data, page='interview_area',
-                               title='Interview Details', image=image)
+                               title='Interview Details', image=image,is_head=session.get('head'))
     else:
         experience = request.form.get('experience')
         interview = request.form.get('interview')
@@ -485,11 +465,13 @@ def candidate_details(e):
         remarks = request.form.get('remarks')
         selection_status = request.form.get('selectionStatus')
         show_feedback = request.form.get('showFeedback')
-        if experience and interview and potential and remarks and selection_status in ['1','2','3']:
+        if experience and interview and potential and remarks and selection_status in ['1', '2', '3']:
             session_db = Session()
             data1 = session_db.query(Interview).filter(Interview.reg_id == e).update(
-                {Interview.scores: [experience, interview, potential], Interview.remarks: remarks, Interview.show_feedback: show_feedback == '1'})
-            data2 = session_db.query(Registration).filter(Registration.id == e,Registration.reviewed == True).update({Registration.selection_status:selection_status})
+                {Interview.scores: [experience, interview, potential], Interview.remarks: remarks,
+                 Interview.show_feedback: show_feedback == '1'})
+            data2 = session_db.query(Registration).filter(Registration.id == e, Registration.reviewed == True).update(
+                {Registration.selection_status: selection_status,Registration.status:False if selection_status=='3' else Registration.status})
             if data1 == 1 and data2 == 1:
                 session_db.commit()
                 json = jsonify()
@@ -516,7 +498,7 @@ def release_all():
 @app.route('/team/candidates/search', methods=['GET'])
 @team_area(False)
 def search_get():
-    return render_template('Team/search.html', title='Search Page')
+    return render_template('Team/search.html', title='Search Page',is_head=session.get('head'))
 
 
 @app.route('/team/candidates/search/<string:e>', methods=['POST'])
@@ -552,11 +534,38 @@ def search(e):
     else:
         return jsonify(err='Incomplete form submitted')
 
-# @app.route('/delete',methods=['GET'])
-# def delete():
+@app.route('/delete',methods=['GET'])
+@team_area(True)
+def delete_and_backup():
+    session_db = Session()
+    q = session_db.query(Admin).filter(Admin.email == session.get('email'),Admin.head == True)
+    if session_db.query(q.exists()):
+        session_db.query(Prev_Registration).delete()
+        query = 'insert into prev_registration (select id,name,email,phone_number,cnic,year,domain,discipline,about,association,why,achievements,selection_status,scores,remarks from registration left join interview on registration.id=interview.reg_id)'
+        session_db.execute(query)
+        session_db.query(Imagestore).delete()
+        session_db.query(Interview).delete()
+        session_db.query(Registration).delete()
+        session_db.commit()
+        json_data = jsonify()
+    else:
+        json_data = jsonify(err = 'you donot have rights to perform deletion')
+    session_db.close()
+    return json_data
 
-
-
+@app.route('/previous/download',methods=['GET'])
+@team_area(False)
+def download_previous():
+    session_db = Session()
+    data = session_db.query(Prev_Registration).all()
+    print(len(data))
+    session_db.close()
+    def generate():
+        selection = {'1': 'selected', '2': 'not selected', '3': 'not yet reviewed'}
+        yield 'id,name,email,phone_number,cnic,year,domain,discipline,about,association,why,achievements,selection_status,experience,interview,potential,remarks'
+        for appl in data:
+            yield f"\n{appl.id},{appl.name},{appl.email},{appl.phone_number},{appl.cnic},{appl.year},{appl.domain},{appl.discipline},{appl.about},{appl.association},{appl.why},{appl.achievements},{selection.get(appl.selection_status)}"+(f",{appl.scores[0]},{appl.scores[1]},{appl.scores[2]},{appl.remarks}" if appl.scores else '')
+    return Response(generate(), mimetype='text/csv')
 
 
 if __name__ == '__main__':

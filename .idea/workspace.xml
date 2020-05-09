@@ -2,7 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="54a68d8e-23f5-4885-851d-6ca702f286bb" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/fetch.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/fetch.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/statusForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/statusForm.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/Team/layout.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/Team/layout.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -201,7 +208,15 @@
       <workItem from="1588627753856" duration="5655000" />
       <workItem from="1588691238377" duration="2820000" />
       <workItem from="1588702521085" duration="1071000" />
-      <workItem from="1588706188451" duration="3638000" />
+      <workItem from="1588706188451" duration="9758000" />
+      <workItem from="1588800549173" duration="5106000" />
+      <workItem from="1588855314975" duration="3716000" />
+      <workItem from="1588863377271" duration="1374000" />
+      <workItem from="1588877497820" duration="599000" />
+      <workItem from="1588940651057" duration="4536000" />
+      <workItem from="1588951020485" duration="2410000" />
+      <workItem from="1588970557378" duration="6583000" />
+      <workItem from="1589018493069" duration="4793000" />
     </task>
     <servers />
   </component>
@@ -237,22 +252,22 @@
       <screen x="0" y="27" width="1024" height="741" />
     </state>
     <state x="295" y="155" width="424" height="491" key="FileChooserDialogImpl/0.27.1024.741@0.27.1024.741" timestamp="1585856443091" />
-    <state width="978" height="182" key="GridCell.Tab.0.bottom" timestamp="1588707842899">
+    <state width="978" height="101" key="GridCell.Tab.0.bottom" timestamp="1589023287485">
       <screen x="0" y="27" width="1024" height="741" />
     </state>
-    <state width="978" height="182" key="GridCell.Tab.0.bottom/0.27.1024.741@0.27.1024.741" timestamp="1588707842899" />
-    <state width="978" height="182" key="GridCell.Tab.0.center" timestamp="1588707842899">
+    <state width="978" height="101" key="GridCell.Tab.0.bottom/0.27.1024.741@0.27.1024.741" timestamp="1589023287485" />
+    <state width="978" height="101" key="GridCell.Tab.0.center" timestamp="1589023287485">
       <screen x="0" y="27" width="1024" height="741" />
     </state>
-    <state width="978" height="182" key="GridCell.Tab.0.center/0.27.1024.741@0.27.1024.741" timestamp="1588707842899" />
-    <state width="978" height="182" key="GridCell.Tab.0.left" timestamp="1588707842898">
+    <state width="978" height="101" key="GridCell.Tab.0.center/0.27.1024.741@0.27.1024.741" timestamp="1589023287485" />
+    <state width="978" height="101" key="GridCell.Tab.0.left" timestamp="1589023287484">
       <screen x="0" y="27" width="1024" height="741" />
     </state>
-    <state width="978" height="182" key="GridCell.Tab.0.left/0.27.1024.741@0.27.1024.741" timestamp="1588707842898" />
-    <state width="978" height="182" key="GridCell.Tab.0.right" timestamp="1588707842899">
+    <state width="978" height="101" key="GridCell.Tab.0.left/0.27.1024.741@0.27.1024.741" timestamp="1589023287484" />
+    <state width="978" height="101" key="GridCell.Tab.0.right" timestamp="1589023287485">
       <screen x="0" y="27" width="1024" height="741" />
     </state>
-    <state width="978" height="182" key="GridCell.Tab.0.right/0.27.1024.741@0.27.1024.741" timestamp="1588707842899" />
+    <state width="978" height="101" key="GridCell.Tab.0.right/0.27.1024.741@0.27.1024.741" timestamp="1589023287485" />
     <state x="1" y="31" width="1022" height="737" key="SettingsEditor" timestamp="1585219994374">
       <screen x="0" y="27" width="1024" height="741" />
     </state>
@@ -271,8 +286,8 @@
     <state x="175" y="89" width="672" height="678" key="search.everywhere.popup/0.27.1024.741@0.27.1024.741" timestamp="1587332496961" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/IEEE$dbSeed.coverage" NAME="dbSeed Coverage Results" MODIFIED="1588630718993" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/IEEE$dbSeed.coverage" NAME="dbSeed Coverage Results" MODIFIED="1589021673935" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/IEEE$models.coverage" NAME="models Coverage Results" MODIFIED="1585661137257" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/IEEE$IEEE.coverage" NAME="IEEE Coverage Results" MODIFIED="1588707784130" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/IEEE$IEEE.coverage" NAME="IEEE Coverage Results" MODIFIED="1589023369490" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

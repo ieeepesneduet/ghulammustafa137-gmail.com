@@ -76,8 +76,8 @@ class Interview(base):
     show_feedback = Column(Boolean,default=False)
     registration = relationship("Registration", back_populates="interview")
 
-class Prev_Registrations(base):
-    __tablename__='prev_registrations'
+class Prev_Registration(base):
+    __tablename__='prev_registration'
 
     id = Column(CHAR(5),primary_key=True)
     name = Column(String(32),nullable=False)
