@@ -12,7 +12,7 @@
     fileInput.onchange = function() {
         if (this.files[0].size > 1.5*1024*1024) {
             window.scrollTo(0,0);
-            showMsg('Image is too big.Max accepted image size 1.5MB.')
+            showMsg('Image is too big.Max accepted image size 1.5MB.','warning')
             this.value = "";
         }
     }
