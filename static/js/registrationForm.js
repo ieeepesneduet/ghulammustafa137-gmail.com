@@ -10,9 +10,9 @@
     }
     const fileInput = document.getElementById('image');
     fileInput.onchange = function() {
-        if (this.files[0].size >= 500*1024) {
+        if (this.files[0].size > 1.5*1024*1024) {
             window.scrollTo(0,0);
-            showMsg('Image is too big.Make sure image is less than 500kb.')
+            showMsg('Image is too big.Max accepted image size 1.5MB.')
             this.value = "";
         }
     }

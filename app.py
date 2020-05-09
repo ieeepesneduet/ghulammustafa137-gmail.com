@@ -18,7 +18,7 @@ from models import *
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 app = Flask(__name__)
 sslify = SSLify(app)
-app.config['MAX_CONTENT_LENGTH'] = 500 * 1024 - 1
+app.config['MAX_CONTENT_LENGTH'] = 1.5 * 1024 * 1024
 app.secret_key = b'\x01Jt\xbc!E5k\x8b]\xe1\xdd0p\xb7Q'
 db = create_engine(environ['DATABASE_URL'])
 Session = sessionmaker(bind=db)
