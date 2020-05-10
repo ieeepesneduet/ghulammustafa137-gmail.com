@@ -44,14 +44,6 @@
                 <li class="nav-item" id="nav-item">
                     <a class="nav-link" href="{{ url_for('search_get') }}" style="color:black;">Search</a>
                 </li>
-                {% if is_head %}
-                    <li class="nav-item" id="nav-item">
-                        <button id="clearDB" class="nav-link" style="color:black;border: none;background: inherit">Clear Database</button>
-                    </li>
-                    <li class="nav-item" id="nav-item">
-                        <a class="nav-link" href="{{ url_for('download_previous') }}" style="color:black;">Export Previous Registration</a>
-                    </li>
-                {% endif %}
                 <li class="nav-item" id="nav-item">
                     <a class="nav-link" href="{{ url_for('logout') }}" style="color:black;">Logout</a>
                 </li>
@@ -59,11 +51,7 @@
         </div>
     </nav>
 </div>
-    <div id="confirmClearDBBox">
-        <div class="message">Are you sure you want to clear the database?</div>
-        <a class="confirmBtn" id="yesClearBtn">Yes</a>
-        <button class="confirmBtn" id="noClearBtn">No</button>
-    </div>
+
 {% if not year %}
     <div id="msg-box"></div>
 {% endif %}
@@ -75,8 +63,6 @@
         </div>
     </div>
 </div>
-{% if is_head %}
-    <script src="{{ url_for('static',filename='js/clearDB.js') }}"></script>
-{% endif %}
+
 </body>
 </html>

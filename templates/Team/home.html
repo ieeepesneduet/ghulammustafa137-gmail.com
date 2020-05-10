@@ -1,6 +1,12 @@
 {% extends 'Team/layout.html' %}
 {% block content %}
-
+    {% if is_head %}
+    <div id="confirmClearDBBox">
+        <div class="message">Are you sure you want to clear the database?</div>
+        <a class="confirmBtn" id="yesClearBtn">Yes</a>
+        <button class="confirmBtn" id="noClearBtn">No</button>
+    </div>
+    {% endif %}
 <div id="img">
   <img src="{{ url_for('static',filename='images/home.png') }}" width = 100%>
 </div>
@@ -24,10 +30,19 @@
       
     </td>
     <td class="col-md-6 col-lg-6" id="right-col">
+        {% if is_head %}
+        <div style="display: flex;justify-content: space-evenly;width: 90%;">
+            <button id="clearDB" class="btn btn-outline-danger" style="display: block">Clear Database</button>
+            <a href="{{ url_for('download_previous') }}" class="btn btn-outline-success" style="display: block">Export Previous Registration</a>
+        </div>
+        {% endif %}
         <canvas height="20%" width="20%" style="margin-top: 100px" id="myChart"></canvas>
     </td>
   </tr>
 </table>
+    {% if is_head %}
+        <script src="{{ url_for('static',filename='js/clearDB.js') }}"></script>
+    {% endif %}
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
     <script>
     const None = 0;

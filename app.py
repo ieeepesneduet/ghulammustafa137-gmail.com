@@ -199,6 +199,7 @@ def home():
 @app.route('/team/logout')
 def logout():
     session.pop('email', None)
+    session.pop('head',None)
     return redirect(url_for('login'))
 
 
@@ -289,7 +290,7 @@ def count_candidates():
 @app.route('/team/candidates', methods=['GET'])
 @team_area(False)
 def candidates():
-    return render_template('Team/candidates.html',title='Candidates',is_head=session.get('head'))
+    return render_template('Team/candidates.html',title='Candidates')
 
 
 @app.route('/team/candidates/candidate', methods=['GET', 'POST'])
@@ -308,7 +309,7 @@ def turnin():
                 return redirect(url_for('home'))
             image = b64encode(data.imagestore.data).decode("utf-8")
             return render_template('Team/interviewArea.html', data=data, page='interview_area', title='Interview Area',
-                                   image=image,is_head=session.get('head'))
+                                   image=image)
         else:
             return redirect(url_for('home'))
     else:
@@ -388,7 +389,7 @@ def turnout():
 @app.route('/team/completed', methods=['GET'])
 @team_area(False)
 def completed():
-    return render_template('Team/interview_completed.html',title='Completed Interviews', year=True,is_head=session.get('head'))
+    return render_template('Team/interview_completed.html',title='Completed Interviews', year=True)
 
 
 @app.route('/team/completed/selection',methods=['POST'])
@@ -457,7 +458,7 @@ def candidate_details(e):
             return redirect(url_for('completed'))
         image = b64encode(data.imagestore.data).decode("utf-8")
         return render_template('Team/interview_details.html', data=data, page='interview_area',
-                               title='Interview Details', image=image,is_head=session.get('head'))
+                               title='Interview Details', image=image)
     else:
         experience = request.form.get('experience')
         interview = request.form.get('interview')
@@ -498,7 +499,7 @@ def release_all():
 @app.route('/team/candidates/search', methods=['GET'])
 @team_area(False)
 def search_get():
-    return render_template('Team/search.html', title='Search Page',is_head=session.get('head'))
+    return render_template('Team/search.html', title='Search Page')
 
 
 @app.route('/team/candidates/search/<string:e>', methods=['POST'])
@@ -537,9 +538,8 @@ def search(e):
 @app.route('/delete',methods=['GET'])
 @team_area(True)
 def delete_and_backup():
-    session_db = Session()
-    q = session_db.query(Admin).filter(Admin.email == session.get('email'),Admin.head == True)
-    if session_db.query(q.exists()):
+    if session.get('head'):
+        session_db = Session()
         session_db.query(Prev_Registration).delete()
         query = 'insert into prev_registration (select id,name,email,phone_number,cnic,year,domain,discipline,about,association,why,achievements,selection_status,scores,remarks from registration left join interview on registration.id=interview.reg_id)'
         session_db.execute(query)
@@ -550,7 +550,6 @@ def delete_and_backup():
         json_data = jsonify()
     else:
         json_data = jsonify(err = 'you donot have rights to perform deletion')
-    session_db.close()
     return json_data
 
 @app.route('/previous/download',methods=['GET'])
@@ -558,7 +557,6 @@ def delete_and_backup():
 def download_previous():
     session_db = Session()
     data = session_db.query(Prev_Registration).all()
-    print(len(data))
     session_db.close()
     def generate():
         selection = {'1': 'selected', '2': 'not selected', '3': 'not yet reviewed'}
