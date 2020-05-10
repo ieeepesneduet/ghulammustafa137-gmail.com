@@ -15,7 +15,7 @@ class PostJsonData{
     }
 }
 
-const fetchUrl = 'https://ieee-registration.herokuapp.com';
+const fetchUrl = 'https://ieee-candidate-recruitment.herokuapp.com/candidatearea/registration';
 
 async function fetchData(fetchPath,handleData,fetchParam){
     try{
