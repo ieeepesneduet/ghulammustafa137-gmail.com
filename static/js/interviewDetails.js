@@ -14,7 +14,7 @@
         e.preventDefault();
         fetchData('/team/completed/'+id,function(data){
             toggleEditable(true);
-            showMsg('Changes saves succesfully','primary')
+            window.history.back();
         },new PostFormData(candidateInfo))
     }
 })();

@@ -4,8 +4,11 @@
     <list default="true" id="54a68d8e-23f5-4885-851d-6ca702f286bb" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/Team/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/Team/home.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/Team/layout.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/Team/layout.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/interviewCompleted.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/interviewCompleted.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/interviewDetails.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/interviewDetails.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/registrationForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/registrationForm.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/statusForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/statusForm.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/Team/interview_completed.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/Team/interview_completed.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,6 +90,7 @@
       <envs>
         <env name="DATABASE_URL" value="postgresql://mustafa:12345678@localhost:5432/ieee" />
         <env name="GOOGLE_SHEETS_KEY" value="AKfycbyvJRlJ7IRg0ayR8yZzo2XSwcvzGDKnjei1PGLcSxLKxFtvnB6K" />
+        <env name="GMAIL_PASSWORD" value="IEeej56lkmh" />
       </envs>
       <option name="SDK_HOME" value="$PROJECT_DIR$/venv/bin/python" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -216,7 +220,10 @@
       <workItem from="1589023971473" duration="3248000" />
       <workItem from="1589053034379" duration="1848000" />
       <workItem from="1589071756115" duration="1994000" />
-      <workItem from="1589122130933" duration="2079000" />
+      <workItem from="1589122130933" duration="2504000" />
+      <workItem from="1589137201891" duration="603000" />
+      <workItem from="1589198031396" duration="3422000" />
+      <workItem from="1589277665479" duration="1981000" />
     </task>
     <servers />
   </component>
@@ -224,10 +231,10 @@
     <option name="version" value="2" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="0" y="55" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1588448548359">
+    <state x="0" y="55" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1589279844679">
       <screen x="0" y="27" width="1024" height="741" />
     </state>
-    <state x="0" y="55" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.27.1024.741@0.27.1024.741" timestamp="1588448548359" />
+    <state x="0" y="55" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.27.1024.741@0.27.1024.741" timestamp="1589279844679" />
     <state x="215" y="202" width="603" height="439" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1588631833375">
       <screen x="0" y="27" width="1024" height="741" />
     </state>
@@ -252,22 +259,22 @@
       <screen x="0" y="27" width="1024" height="741" />
     </state>
     <state x="295" y="155" width="424" height="491" key="FileChooserDialogImpl/0.27.1024.741@0.27.1024.741" timestamp="1585856443091" />
-    <state width="978" height="174" key="GridCell.Tab.0.bottom" timestamp="1589122518450">
+    <state width="978" height="299" key="GridCell.Tab.0.bottom" timestamp="1589126053441">
       <screen x="0" y="27" width="1024" height="741" />
     </state>
-    <state width="978" height="174" key="GridCell.Tab.0.bottom/0.27.1024.741@0.27.1024.741" timestamp="1589122518450" />
-    <state width="978" height="174" key="GridCell.Tab.0.center" timestamp="1589122518449">
+    <state width="978" height="299" key="GridCell.Tab.0.bottom/0.27.1024.741@0.27.1024.741" timestamp="1589126053441" />
+    <state width="978" height="299" key="GridCell.Tab.0.center" timestamp="1589126053441">
       <screen x="0" y="27" width="1024" height="741" />
     </state>
-    <state width="978" height="174" key="GridCell.Tab.0.center/0.27.1024.741@0.27.1024.741" timestamp="1589122518449" />
-    <state width="978" height="174" key="GridCell.Tab.0.left" timestamp="1589122518449">
+    <state width="978" height="299" key="GridCell.Tab.0.center/0.27.1024.741@0.27.1024.741" timestamp="1589126053441" />
+    <state width="978" height="299" key="GridCell.Tab.0.left" timestamp="1589126053441">
       <screen x="0" y="27" width="1024" height="741" />
     </state>
-    <state width="978" height="174" key="GridCell.Tab.0.left/0.27.1024.741@0.27.1024.741" timestamp="1589122518449" />
-    <state width="978" height="174" key="GridCell.Tab.0.right" timestamp="1589122518449">
+    <state width="978" height="299" key="GridCell.Tab.0.left/0.27.1024.741@0.27.1024.741" timestamp="1589126053441" />
+    <state width="978" height="299" key="GridCell.Tab.0.right" timestamp="1589126053441">
       <screen x="0" y="27" width="1024" height="741" />
     </state>
-    <state width="978" height="174" key="GridCell.Tab.0.right/0.27.1024.741@0.27.1024.741" timestamp="1589122518449" />
+    <state width="978" height="299" key="GridCell.Tab.0.right/0.27.1024.741@0.27.1024.741" timestamp="1589126053441" />
     <state x="1" y="31" width="1022" height="737" key="SettingsEditor" timestamp="1585219994374">
       <screen x="0" y="27" width="1024" height="741" />
     </state>

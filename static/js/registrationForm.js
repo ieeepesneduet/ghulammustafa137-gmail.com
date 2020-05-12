@@ -3,6 +3,7 @@
     registrationForm.onsubmit = function(e){
         e.preventDefault();
         window.scrollTo(0,0);
+        showMsg('PLease wait here while we process your submission','warning')
         fetchData('/candidatearea/registration',function(data){
             showMsg(`Your application has been received.Your application id is pes/20/${data.id} .You can use this id to check the status of your application.Your code will be emailed to you shortly.`,'primary')
             registrationForm.reset();

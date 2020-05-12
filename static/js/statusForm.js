@@ -7,12 +7,12 @@
         if(match){
             fetchData('/candidatearea/status',function(data){
                 let htmlData = '';
-                const dataValues = {a:'Full Name',b:'Year',c:'Email',d:'Domain',j:'Application reviewed',e:'Experience rating',f:'Interview rating',g:'Potential rating',i:'Remarks',h:'Selection Status'};
+                const dataValues = {a:'Full Name',b:'Year',c:'Email',d:'Domain',j:'Interview Conducted',i:'Remarks',h:'Selection Status'};
                 for(const prop in data){
                     htmlData += `<tr><td>${dataValues[prop]}</td><td>${data[prop]}</td></tr>`
                 }
                 document.getElementById('applicationData').innerHTML = htmlData;
-                showMsg(`Your application has${data.j?'':' not'} been reviewed`,'primary')
+                showMsg(`Your interview has ${data.j?`been conducted ${data.h?' and your application has been reviewed.':'and your application is under review process'}`:'not been conducted yet.'}`,'primary')
             },new PostJsonData({id:match[1]}))
         }else{
             showMsg('Application ID is in wrong format.Correct format pes/20/Kn5sU');

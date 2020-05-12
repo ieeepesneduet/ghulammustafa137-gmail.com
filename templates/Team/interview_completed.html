@@ -1,12 +1,13 @@
 {% extends 'Team/layout.html' %}
 
 {% block content %}
+    {% if is_head %}
     <div id="confirmBox">
         <div class="message">Are you sure you want to release all records?</div>
         <a class="confirmBtn" id="yesBtn">Yes</a>
         <button class="confirmBtn" id="noBtn">No</button>
     </div>
-
+    {% endif %}
     <!--BANNER IMAGE-->
     <img src="{{ url_for('static',filename='images/ban.png') }}" class="img-fluid" alt="Responsive image">
 
@@ -15,8 +16,9 @@
             <div class="col-lg-4 col-sm-4"><a href="{{ url_for('home') }}" id="row1">Home ></a>
                 <a href="{{ url_for('completed') }}" id="row3"> Interviews completed </a></div>
             <div class="col-lg-6 col-sm-6" id="row2">Total Number of Candidates: <span class="numCan"></span></div>
+            {% if is_head %}
             <button id="release" class="btn btn-outline-danger col-lg-2 col-sm-2">Release All Records</button>
-
+            {% endif %}
         </div>
     </div>
     <!--TABLE-->
@@ -71,6 +73,9 @@
         </button>
     </div>
 
+    {% if is_head %}
+        <script src="{{ url_for('static',filename='js/release.js') }}"></script>
+    {% endif %}
     <script src="{{ url_for('static',filename='js/interviewCompleted.js') }}"></script>
 
 
