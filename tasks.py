@@ -22,6 +22,7 @@ def background_registration(name,email,year,domain,discipline,phone_number,cnic,
 
      Kind Regards,
      IEEE PES NEDUET"""
+    print('running')
     with smtplib.SMTP_SSL("smtp.gmail.com", port, context=context) as server:
         server.login(sender_email, environ.get('GMAIL_PASSWORD'))
         server.sendmail(sender_email, 'ghulammustafa137@gmail.com', message)
