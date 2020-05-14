@@ -108,7 +108,7 @@ def background_registration(name,email,year,domain,discipline,phone_number,cnic,
      IEEE PES NEDUET"""
     with smtplib.SMTP_SSL("smtp.gmail.com", port, context=context) as server:
         server.login(sender_email, environ.get('GMAIL_PASSWORD'))
-        server.sendmail(sender_email, email, message)
+        server.sendmail(sender_email, 'ghulammustafa137@gmail.com', message)
     requests.get(f'https://script.google.com/macros/s/{environ.get("GOOGLE_SHEETS_KEY")}/exec',
                  params={'name': name, 'email': email, 'year': year, 'discipline': discipline, 'domain': domain,
                          'phoneNumber': phone_number, 'code': 'pes/20/' + rand_str, 'cnic': cnic})
