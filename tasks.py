@@ -7,9 +7,9 @@ import requests
 context = ssl.create_default_context()
 port = 465
 sender_email = "recruitmentpesneduet@gmail.com"
-celeryapp = Celery('tasks',broker='sqla+'+environ['DATABASE_URL'])
+app = Celery('tasks',broker='sqla+'+environ['DATABASE_URL'])
 
-@celeryapp.task
+@app.task
 def background_registration(name,email,year,domain,discipline,phone_number,cnic,rand_str):
     message = f"""\
      Subject: IEEE PES RECRUITMENT

@@ -4,7 +4,7 @@ from functools import wraps
 from os import environ
 from os import path
 from random import randint
-import tasks
+from tasks import background_registration
 
 
 from bcrypt import checkpw
@@ -126,7 +126,7 @@ def registration():
                 session_db.close()
                 return jsonify(err='email or/and cnic already registered')
             session_db.close()
-            tasks.background_registration.delay(name,email,year,domain,discipline,phone_number,cnic,rand_str)
+            background_registration.delay(name,email,year,domain,discipline,phone_number,cnic,rand_str)
             return jsonify(id=rand_str)
         else:
             return jsonify(err='Please upload a .jpg/.png image')
