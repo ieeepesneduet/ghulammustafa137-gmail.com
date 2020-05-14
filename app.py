@@ -4,21 +4,20 @@ from functools import wraps
 from os import environ
 from os import path
 from random import randint
-import smtplib
-import ssl
+import tasks
 
-import requests
+
 from bcrypt import checkpw
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for, send_file, Response
 from flask_sslify import SSLify
 from sqlalchemy import create_engine, exc
 from sqlalchemy.sql.expression import func
 from sqlalchemy.orm import load_only, defer, joinedload, sessionmaker
-from celery import Celery
+
 
 
 from models import *
-BROKER_URL = 'sqla+'+ environ['DATABASE_URL']
+
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 app = Flask(__name__)
 sslify = SSLify(app)
@@ -26,12 +25,6 @@ app.config['MAX_CONTENT_LENGTH'] = 1.5 * 1024 * 1024
 app.secret_key = environ['SECRET_KEY'].encode('utf8')
 db = create_engine(environ['DATABASE_URL'])
 Session = sessionmaker(bind=db)
-celery = Celery(app.name, broker=BROKER_URL)
-port = 465
-context = ssl.create_default_context()
-sender_email = "recruitmentpesneduet@gmail.com"
-
-
 
 
 def file_type(filename):
@@ -93,25 +86,6 @@ def team_area2(function):
 
     return wrapper
 
-@celery.task
-def background_registration(name,email,year,domain,discipline,phone_number,cnic,rand_str):
-    message = f"""\
-     Subject: IEEE PES RECRUITMENT
-
-     Hi {name},
-
-     Your IEEE PES NED Recruitment Code is pes/20/{rand_str}.
-
-     We wish you best of luck for your interview.
-
-     Kind Regards,
-     IEEE PES NEDUET"""
-    with smtplib.SMTP_SSL("smtp.gmail.com", port, context=context) as server:
-        server.login(sender_email, environ.get('GMAIL_PASSWORD'))
-        server.sendmail(sender_email, 'ghulammustafa137@gmail.com', message)
-    requests.get(f'https://script.google.com/macros/s/{environ.get("GOOGLE_SHEETS_KEY")}/exec',
-                 params={'name': name, 'email': email, 'year': year, 'discipline': discipline, 'domain': domain,
-                         'phoneNumber': phone_number, 'code': 'pes/20/' + rand_str, 'cnic': cnic})
 
 
 @app.route('/candidatearea/registration', methods=['GET', 'POST'])
@@ -152,7 +126,7 @@ def registration():
                 session_db.close()
                 return jsonify(err='email or/and cnic already registered')
             session_db.close()
-            background_registration.delay(name,email,year,domain,discipline,phone_number,cnic,rand_str)
+            tasks.background_registration.delay(name,email,year,domain,discipline,phone_number,cnic,rand_str)
             return jsonify(id=rand_str)
         else:
             return jsonify(err='Please upload a .jpg/.png image')
