@@ -7,7 +7,7 @@ import requests
 context = ssl.create_default_context()
 port = 465
 sender_email = "recruitmentpesneduet@gmail.com"
-celeryapp = Celery('tasks','sqla+'+environ['DATABASE_URL'])
+celeryapp = Celery('tasks',broker='sqla+'+environ['DATABASE_URL'])
 
 @celeryapp.task
 def background_registration(name,email,year,domain,discipline,phone_number,cnic,rand_str):
