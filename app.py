@@ -4,6 +4,10 @@ from functools import wraps
 from os import environ
 from os import path
 from random import randint
+import smtplib
+import ssl
+
+
 
 import requests
 from bcrypt import checkpw
@@ -13,15 +17,21 @@ from sqlalchemy import create_engine, exc
 from sqlalchemy.sql.expression import func
 from sqlalchemy.orm import load_only, defer, joinedload, sessionmaker
 
+
+
 from models import *
 
+
+port = 465
+sender_email = "recruitmentpesneduet@gmail.com"
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 app = Flask(__name__)
 sslify = SSLify(app)
 app.config['MAX_CONTENT_LENGTH'] = 1.5 * 1024 * 1024
-app.secret_key = b'\x01Jt\xbc!E5k\x8b]\xe1\xdd0p\xb7Q'
+app.secret_key = environ['SECRET_KEY'].encode('utf8')
 db = create_engine(environ['DATABASE_URL'])
 Session = sessionmaker(bind=db)
+context = ssl.create_default_context()
 
 
 def file_type(filename):
@@ -85,7 +95,6 @@ def team_area2(function):
 
 
 
-
 @app.route('/candidatearea/registration', methods=['GET', 'POST'])
 @candidate_area('CandidateArea/index.html', is_reg=True, title='IEEE Registration')
 def registration():
@@ -124,7 +133,24 @@ def registration():
                 session_db.close()
                 return jsonify(err='email or/and cnic already registered')
             session_db.close()
-            requests.get(f'https://script.google.com/macros/s/{environ.get("GOOGLE_SHEETS_KEY")}/exec',params={'name':name,'email':email,'year':year,'discipline':discipline,'domain':domain,'phoneNumber':phone_number,'code':'pes/20/'+rand_str,'cnic':cnic})
+            SUBJECT = "IEEE PES RECRUITMENT"
+            TEXT = f"""Hi {name},
+
+                Your IEEE PES NED Recruitment Code is pes/20/{rand_str}.
+
+                We wish you best of luck for your interview.
+
+                Kind Regards,
+                IEEE PES NEDUET"""
+
+            message = 'Subject: {}\n\n{}'.format(SUBJECT, TEXT)
+            with smtplib.SMTP_SSL("smtp.gmail.com", port, context=context) as server:
+                server.login(sender_email, environ.get('GMAIL_PASSWORD'))
+                server.sendmail(sender_email, email, message)
+            requests.get(f'https://script.google.com/macros/s/{environ.get("GOOGLE_SHEETS_KEY")}/exec',
+                         params={'name': name, 'email': email, 'year': year, 'discipline': discipline, 'domain': domain,
+                                 'phoneNumber': phone_number, 'code': 'pes/20/' + rand_str, 'cnic': cnic})
+
             return jsonify(id=rand_str)
         else:
             return jsonify(err='Please upload a .jpg/.png image')
@@ -144,9 +170,6 @@ def status():
         else:
             dict = {'a':data.name, 'b':data.year, 'c':data.email,'d':data.domain,'j':data.status}
             if data.status:
-                dict['e'] = data.interview.scores[0]
-                dict['f'] = data.interview.scores[1]
-                dict['g'] = data.interview.scores[2]
                 dict['h'] = 'selected' if data.selection_status == '1' else 'not selected'
                 if data.interview.show_feedback:
                     dict['i'] = data.interview.remarks
@@ -389,7 +412,7 @@ def turnout():
 @app.route('/team/completed', methods=['GET'])
 @team_area(False)
 def completed():
-    return render_template('Team/interview_completed.html',title='Completed Interviews', year=True)
+    return render_template('Team/interview_completed.html',title='Completed Interviews', year=True,is_head=session.get('head'))
 
 
 @app.route('/team/completed/selection',methods=['POST'])
@@ -471,7 +494,7 @@ def candidate_details(e):
             data1 = session_db.query(Interview).filter(Interview.reg_id == e).update(
                 {Interview.scores: [experience, interview, potential], Interview.remarks: remarks,
                  Interview.show_feedback: show_feedback == '1'})
-            data2 = session_db.query(Registration).filter(Registration.id == e, Registration.reviewed == True).update(
+            data2 = session_db.query(Registration).filter(Registration.id == e).update(
                 {Registration.selection_status: selection_status,Registration.status:False if selection_status=='3' else Registration.status})
             if data1 == 1 and data2 == 1:
                 session_db.commit()
@@ -488,11 +511,12 @@ def candidate_details(e):
 @app.route("/team/completed/release", methods=['GET'])
 @team_area(True)
 def release_all():
-    session_db = Session()
-    session_db.query(Registration).filter(Registration.reviewed == True, Registration.status == False,Registration.selection_status != '3').update(
-        {'status': True})
-    session_db.commit()
-    session_db.close()
+    if session.get('head'):
+        session_db = Session()
+        session_db.query(Registration).filter(Registration.reviewed == True, Registration.status == False,Registration.selection_status != '3').update(
+            {'status': True})
+        session_db.commit()
+        session_db.close()
     return jsonify()
 
 
@@ -511,10 +535,12 @@ def search(e):
     if search_query and domain and type_search and type_search in ['name', 'email', 'phone_number']:
         session_db = Session()
         data_list = []
+        query = session_db.query(Registration).filter(
+            getattr(Registration,
+                    type_search).ilike(
+                "%" + search_query + "%"))
         if e == 'records':
-            query = session_db.query(Registration).options(
-                load_only('name', 'email', 'discipline', 'phone_number', 'year', 'reviewed')).filter(
-                func.lower(getattr(Registration, type_search)) == search_query.lower())
+            query = query.options(load_only('name', 'email', 'discipline', 'phone_number', 'year', 'reviewed'))
             if not domain == 'All':
                 query = query.filter(Registration.domain == domain)
             for appl in query.all():
@@ -522,10 +548,7 @@ def search(e):
                     [appl.name, appl.email, appl.phone_number,
                      appl.year, appl.discipline,appl.reviewed])
         elif e == 'suggestions':
-            query = session_db.query(Registration).options(load_only(type_search)).filter(
-                getattr(Registration,
-                        type_search).ilike(
-                    "%" + search_query + "%"))
+            query = query.options(load_only(type_search))
             if not domain == 'All':
                 query = query.filter(Registration.domain == domain)
             for appl in query.all():

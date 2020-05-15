@@ -161,6 +161,17 @@ iframe {
   color: #00ad5f;
 }
 
+.tableDesign:nth-child(odd)
+{
+    background-color: #f2f2f2;
+}
+#candSelected{
+    color: green;
+}
+#candNotSelected{
+    color: red;
+}
+
 /*==================================================================
 [ Size ]*/
 .size1 {
