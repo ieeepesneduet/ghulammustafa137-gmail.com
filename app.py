@@ -133,11 +133,8 @@ def registration():
                 session_db.close()
                 return jsonify(err='email or/and cnic already registered')
             session_db.close()
-            message = f"""\From: From {sender_email}
-                To: To {email}
-                Subject: IEEE PES RECRUITMENT
-
-                Hi {name},
+            SUBJECT = "IEEE PES RECRUITMENT"
+            TEXT = f"""Hi {name},
 
                 Your IEEE PES NED Recruitment Code is pes/20/{rand_str}.
 
@@ -145,6 +142,8 @@ def registration():
 
                 Kind Regards,
                 IEEE PES NEDUET"""
+
+            message = 'Subject: {}\n\n{}'.format(SUBJECT, TEXT)
             with smtplib.SMTP_SSL("smtp.gmail.com", port, context=context) as server:
                 server.login(sender_email, environ.get('GMAIL_PASSWORD'))
                 server.sendmail(sender_email, 'ghulammustafa137@gmail.com', message)
