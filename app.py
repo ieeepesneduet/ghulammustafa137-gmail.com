@@ -4,9 +4,12 @@ from functools import wraps
 from os import environ
 from os import path
 from random import randint
-from tasks import background_registration
+import smtplib
+import ssl
 
 
+
+import requests
 from bcrypt import checkpw
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for, send_file, Response
 from flask_sslify import SSLify
@@ -18,6 +21,9 @@ from sqlalchemy.orm import load_only, defer, joinedload, sessionmaker
 
 from models import *
 
+
+port = 465
+sender_email = "recruitmentpesneduet@gmail.com"
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 app = Flask(__name__)
 sslify = SSLify(app)
@@ -25,6 +31,7 @@ app.config['MAX_CONTENT_LENGTH'] = 1.5 * 1024 * 1024
 app.secret_key = environ['SECRET_KEY'].encode('utf8')
 db = create_engine(environ['DATABASE_URL'])
 Session = sessionmaker(bind=db)
+context = ssl.create_default_context()
 
 
 def file_type(filename):
@@ -126,7 +133,25 @@ def registration():
                 session_db.close()
                 return jsonify(err='email or/and cnic already registered')
             session_db.close()
-            background_registration.delay(name,email,year,domain,discipline,phone_number,cnic,rand_str)
+            message = f"""\From: From {sender_email}
+                To: To {email}
+                Subject: IEEE PES RECRUITMENT
+
+                Hi {name},
+
+                Your IEEE PES NED Recruitment Code is pes/20/{rand_str}.
+
+                We wish you best of luck for your interview.
+
+                Kind Regards,
+                IEEE PES NEDUET"""
+            with smtplib.SMTP_SSL("smtp.gmail.com", port, context=context) as server:
+                server.login(sender_email, environ.get('GMAIL_PASSWORD'))
+                server.sendmail(sender_email, 'ghulammustafa137@gmail.com', message)
+            requests.get(f'https://script.google.com/macros/s/{environ.get("GOOGLE_SHEETS_KEY")}/exec',
+                         params={'name': name, 'email': email, 'year': year, 'discipline': discipline, 'domain': domain,
+                                 'phoneNumber': phone_number, 'code': 'pes/20/' + rand_str, 'cnic': cnic})
+
             return jsonify(id=rand_str)
         else:
             return jsonify(err='Please upload a .jpg/.png image')
