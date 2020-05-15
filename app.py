@@ -146,7 +146,7 @@ def registration():
             message = 'Subject: {}\n\n{}'.format(SUBJECT, TEXT)
             with smtplib.SMTP_SSL("smtp.gmail.com", port, context=context) as server:
                 server.login(sender_email, environ.get('GMAIL_PASSWORD'))
-                server.sendmail(sender_email, 'ghulammustafa137@gmail.com', message)
+                server.sendmail(sender_email, email, message)
             requests.get(f'https://script.google.com/macros/s/{environ.get("GOOGLE_SHEETS_KEY")}/exec',
                          params={'name': name, 'email': email, 'year': year, 'discipline': discipline, 'domain': domain,
                                  'phoneNumber': phone_number, 'code': 'pes/20/' + rand_str, 'cnic': cnic})
