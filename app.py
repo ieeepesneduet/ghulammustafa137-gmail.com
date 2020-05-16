@@ -135,13 +135,12 @@ def registration():
             session_db.close()
             SUBJECT = "IEEE PES RECRUITMENT"
             TEXT = f"""Hi {name},
+            Your IEEE PES NED Recruitment Code is pes/20/{rand_str}.
 
-                Your IEEE PES NED Recruitment Code is pes/20/{rand_str}.
+            We wish you best of luck for your interview.
 
-                We wish you best of luck for your interview.
-
-                Kind Regards,
-                IEEE PES NEDUET"""
+            Kind Regards,
+            IEEE PES NEDUET"""
 
             message = 'Subject: {}\n\n{}'.format(SUBJECT, TEXT)
             with smtplib.SMTP_SSL("smtp.gmail.com", port, context=context) as server:
