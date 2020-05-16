@@ -162,12 +162,12 @@ def registration():
 def status():
     if request.is_json:
         session_db = Session()
-        data = session_db.query(Registration).options(load_only('name','email','year','domain','status','selection_status')).get(request.get_json()['id'])
+        data = session_db.query(Registration).options(load_only('name','email','year','domain','status','selection_status','reviewed')).get(request.get_json()['id'])
         if data is None:
             session_db.close()
             return jsonify(err='Invalid ID')
         else:
-            dict = {'a':data.name, 'b':data.year, 'c':data.email,'d':data.domain,'j':data.status}
+            dict = {'a':data.name, 'b':data.year, 'c':data.email,'d':data.domain,'j':data.status,'e':data.reviewed}
             if data.status:
                 dict['h'] = 'selected' if data.selection_status == '1' else 'not selected'
                 if data.interview.show_feedback:
