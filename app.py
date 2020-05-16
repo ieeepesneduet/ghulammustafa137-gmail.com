@@ -167,7 +167,7 @@ def status():
             session_db.close()
             return jsonify(err='Invalid ID')
         else:
-            dict = {'a':data.name, 'b':data.year, 'c':data.email,'d':data.domain,'j':data.status,'e':data.reviewed}
+            dict = {'a':data.name, 'b':data.year, 'c':data.email,'d':data.domain,'j':data.reviewed}
             if data.status:
                 dict['h'] = 'selected' if data.selection_status == '1' else 'not selected'
                 if data.interview.show_feedback:
